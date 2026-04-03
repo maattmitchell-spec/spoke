@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BikeWheelIcon } from "@/components/SpokeWordmark";
 import { useColors } from "@/hooks/useColors";
+import { useTheme } from "@/context/ThemeContext";
 import { useEvents } from "@/context/EventsContext";
 
 const STATS = [
@@ -28,10 +29,19 @@ const SETTINGS_ITEMS = [
   { icon: "info", label: "About Spoke" },
 ];
 
+type ThemeOption = "light" | "dark" | "system";
+const THEME_OPTIONS: ThemeOption[] = ["light", "dark", "system"];
+const THEME_ICONS: Record<ThemeOption, string> = {
+  light: "sun",
+  dark: "moon",
+  system: "monitor",
+};
+
 export default function ProfileScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const { events, joinedCount } = useEvents();
+  const { joinedCount } = useEvents();
+  const { preference, setPreference } = useTheme();
   const isWeb = Platform.OS === "web";
 
   return (
@@ -165,6 +175,71 @@ export default function ProfileScreen() {
             },
           ]}
         >
+          <View
+            style={[
+              styles.settingsRow,
+              {
+                borderBottomWidth: StyleSheet.hairlineWidth,
+                borderBottomColor: colors.border,
+              },
+            ]}
+          >
+            <View style={styles.settingsLeft}>
+              <Feather
+                name={THEME_ICONS[preference] as any}
+                size={17}
+                color={colors.foreground}
+              />
+              <Text style={[styles.settingsLabel, { color: colors.foreground }]}>
+                Appearance
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.themeToggle,
+                { backgroundColor: colors.secondary, borderRadius: colors.radius },
+              ]}
+            >
+              {THEME_OPTIONS.map((opt) => (
+                <TouchableOpacity
+                  key={opt}
+                  activeOpacity={0.7}
+                  onPress={() => setPreference(opt)}
+                  style={[
+                    styles.themeOption,
+                    preference === opt && {
+                      backgroundColor: colors.primary,
+                      borderRadius: colors.radius - 2,
+                    },
+                  ]}
+                >
+                  <Feather
+                    name={THEME_ICONS[opt] as any}
+                    size={14}
+                    color={
+                      preference === opt
+                        ? colors.primaryForeground
+                        : colors.mutedForeground
+                    }
+                  />
+                  <Text
+                    style={[
+                      styles.themeOptionText,
+                      {
+                        color:
+                          preference === opt
+                            ? colors.primaryForeground
+                            : colors.mutedForeground,
+                      },
+                    ]}
+                  >
+                    {opt.charAt(0).toUpperCase() + opt.slice(1)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+
           {SETTINGS_ITEMS.map((item, index) => (
             <TouchableOpacity
               key={item.label}
@@ -312,5 +387,21 @@ const styles = StyleSheet.create({
   settingsLabel: {
     fontSize: 15,
     fontFamily: "DMSans_400Regular",
+  },
+  themeToggle: {
+    flexDirection: "row",
+    padding: 3,
+    gap: 2,
+  },
+  themeOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  themeOptionText: {
+    fontSize: 12,
+    fontFamily: "DMSans_500Medium",
   },
 });
