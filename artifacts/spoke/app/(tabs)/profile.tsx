@@ -1,13 +1,14 @@
 import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -56,7 +57,7 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { joinedCount } = useEvents();
   const { preference, setPreference } = useTheme();
-  const { profile, requireAccount, updateAvatar } = useUser();
+  const { profile, requireAccount, updateAvatar, updateBio } = useUser();
   const isWeb = Platform.OS === "web";
 
   const handlePickAvatar = useCallback(() => {
@@ -92,6 +93,36 @@ export default function ProfileScreen() {
     };
     launch();
   }, [profile, requireAccount, updateAvatar]);
+
+  const BIO_MAX = 200;
+  const DEFAULT_BIO = "Remote worker. Weekend adventurer. Always looking for the next great trail or road.";
+  const currentBio = profile?.bio ?? DEFAULT_BIO;
+
+  const [editingBio, setEditingBio] = useState(false);
+  const [draftBio, setDraftBio] = useState(currentBio);
+  const bioInputRef = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (editingBio) {
+      setTimeout(() => bioInputRef.current?.focus(), 80);
+    }
+  }, [editingBio]);
+
+  const handleEditBio = useCallback(() => {
+    if (!profile) { requireAccount(() => {}); return; }
+    setDraftBio(currentBio);
+    setEditingBio(true);
+  }, [profile, requireAccount, currentBio]);
+
+  const handleSaveBio = useCallback(() => {
+    updateBio(draftBio.trim());
+    setEditingBio(false);
+  }, [draftBio, updateBio]);
+
+  const handleCancelBio = useCallback(() => {
+    setEditingBio(false);
+    setDraftBio(currentBio);
+  }, [currentBio]);
 
   const displayName = profile?.name ?? "Your Name";
   const initials = profile ? getInitials(profile.name) : "YO";
@@ -240,22 +271,83 @@ export default function ProfileScreen() {
             styles.bioCard,
             {
               backgroundColor: colors.card,
-              borderColor: colors.border,
+              borderColor: editingBio ? colors.primary : colors.border,
               borderRadius: colors.radius,
             },
           ]}
         >
-          <Text style={[styles.bioText, { color: colors.mutedForeground }]}>
-            Remote worker. Weekend adventurer. Always looking for the next great
-            trail or road.
-          </Text>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.editRow}
-          >
-            <Feather name="edit-2" size={13} color={colors.primary} />
-            <Text style={[styles.editText, { color: colors.primary }]}>Edit bio</Text>
-          </TouchableOpacity>
+          {editingBio ? (
+            <>
+              <TextInput
+                ref={bioInputRef}
+                style={[
+                  styles.bioInput,
+                  { color: colors.foreground },
+                ]}
+                value={draftBio}
+                onChangeText={(t) => setDraftBio(t.slice(0, BIO_MAX))}
+                multiline
+                placeholder="Tell the crew who you are..."
+                placeholderTextColor={colors.mutedForeground}
+                textAlignVertical="top"
+                returnKeyType="default"
+                blurOnSubmit={false}
+              />
+              <View style={styles.bioEditFooter}>
+                <Text style={[styles.charCount, { color: colors.mutedForeground }]}>
+                  {draftBio.length}/{BIO_MAX}
+                </Text>
+                <View style={styles.bioActions}>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={handleCancelBio}
+                    style={[
+                      styles.bioActionBtn,
+                      {
+                        borderColor: colors.border,
+                        borderRadius: colors.radius / 2,
+                      },
+                    ]}
+                  >
+                    <Text style={[styles.bioActionText, { color: colors.mutedForeground }]}>
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    activeOpacity={0.85}
+                    onPress={handleSaveBio}
+                    style={[
+                      styles.bioActionBtn,
+                      {
+                        backgroundColor: colors.primary,
+                        borderRadius: colors.radius / 2,
+                      },
+                    ]}
+                  >
+                    <Text style={[styles.bioActionText, { color: colors.primaryForeground }]}>
+                      Save
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </>
+          ) : (
+            <>
+              <Text style={[styles.bioText, { color: colors.mutedForeground }]}>
+                {currentBio}
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={handleEditBio}
+                style={styles.editRow}
+              >
+                <Feather name="edit-2" size={13} color={colors.primary} />
+                <Text style={[styles.editText, { color: colors.primary }]}>
+                  Edit bio
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </View>
 
@@ -483,13 +575,43 @@ const styles = StyleSheet.create({
   },
   bioCard: {
     padding: 14,
-    borderWidth: 1,
+    borderWidth: 1.5,
   },
   bioText: {
     fontSize: 14,
     fontFamily: "DMSans_400Regular",
     lineHeight: 20,
     marginBottom: 10,
+  },
+  bioInput: {
+    fontSize: 14,
+    fontFamily: "DMSans_400Regular",
+    lineHeight: 20,
+    minHeight: 80,
+    marginBottom: 10,
+    paddingTop: 0,
+  },
+  bioEditFooter: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  charCount: {
+    fontSize: 11,
+    fontFamily: "DMSans_400Regular",
+  },
+  bioActions: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  bioActionBtn: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderWidth: 1,
+  },
+  bioActionText: {
+    fontSize: 13,
+    fontFamily: "DMSans_500Medium",
   },
   editRow: {
     flexDirection: "row",

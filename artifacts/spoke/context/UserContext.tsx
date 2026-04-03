@@ -18,6 +18,7 @@ export interface UserProfile {
   joinedYear: number;
   authProvider: "email" | "google" | "apple";
   avatarUri?: string;
+  bio?: string;
 }
 
 interface UserContextType {
@@ -25,6 +26,7 @@ interface UserContextType {
   isRegistered: boolean;
   saveProfile: (p: UserProfile, password?: string) => void;
   updateAvatar: (uri: string) => void;
+  updateBio: (bio: string) => void;
   requireAccount: (onReady: () => void) => void;
   verifySignIn: (email: string, password: string) => Promise<UserProfile | null>;
 }
@@ -55,6 +57,15 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     setProfile((prev) => {
       if (!prev) return prev;
       const updated = { ...prev, avatarUri: uri };
+      AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
+  const updateBio = useCallback((bio: string) => {
+    setProfile((prev) => {
+      if (!prev) return prev;
+      const updated = { ...prev, bio };
       AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
       return updated;
     });
@@ -114,6 +125,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         isRegistered: !!profile,
         saveProfile,
         updateAvatar,
+        updateBio,
         requireAccount,
         verifySignIn,
       }}
