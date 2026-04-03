@@ -10,10 +10,10 @@ interface Props {
 }
 
 const ROLE_COLORS: Record<string, string> = {
-  "Ride Captain": "#FF4D1C",
-  "Trail Ambassador": "#FF7A3D",
+  "Ride Captain": "#1A9E4F",
+  "Trail Ambassador": "#2EBD6A",
   "Community Host": "#FFB800",
-  Member: "#78716A",
+  Member: "#6B7D72",
 };
 
 export function MemberCard({ member }: Props) {
