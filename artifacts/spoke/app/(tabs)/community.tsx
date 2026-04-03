@@ -64,7 +64,7 @@ export default function CommunityScreen() {
         contentContainerStyle={[
           styles.list,
           {
-            paddingBottom: (isWeb ? 34 : insets.bottom) + 84 + 16,
+            paddingBottom: (isWeb ? 34 : insets.bottom) + 16,
           },
         ]}
         showsVerticalScrollIndicator={false}

@@ -1,14 +1,15 @@
-import { BlurView } from "expo-blur";
 import { isLiquidGlassAvailable } from "expo-glass-effect";
 import { Tabs } from "expo-router";
 import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
 import { SymbolView } from "expo-symbols";
-import { Feather, Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import React from "react";
-import { Platform, StyleSheet, View, useColorScheme } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 import { useColors } from "@/hooks/useColors";
 import { useEvents } from "@/context/EventsContext";
+
+const isIOS = Platform.OS === "ios";
 
 function NativeTabLayout() {
   return (
@@ -35,9 +36,6 @@ function NativeTabLayout() {
 
 function ClassicTabLayout() {
   const colors = useColors();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
-  const isIOS = Platform.OS === "ios";
   const isWeb = Platform.OS === "web";
   const { joinedCount } = useEvents();
 
@@ -48,28 +46,12 @@ function ClassicTabLayout() {
         tabBarInactiveTintColor: colors.mutedForeground,
         headerShown: false,
         tabBarStyle: {
-          position: "absolute",
-          backgroundColor: isIOS ? "transparent" : colors.background,
-          borderTopWidth: isWeb ? 1 : StyleSheet.hairlineWidth,
+          backgroundColor: colors.background,
+          borderTopWidth: StyleSheet.hairlineWidth,
           borderTopColor: colors.border,
           elevation: 0,
           ...(isWeb ? { height: 84 } : {}),
         },
-        tabBarBackground: () =>
-          isIOS ? (
-            <BlurView
-              intensity={100}
-              tint={isDark ? "dark" : "light"}
-              style={StyleSheet.absoluteFill}
-            />
-          ) : isWeb ? (
-            <View
-              style={[
-                StyleSheet.absoluteFill,
-                { backgroundColor: colors.background },
-              ]}
-            />
-          ) : null,
         tabBarLabelStyle: {
           fontFamily: "DMSans_500Medium",
           fontSize: 10,
