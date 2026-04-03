@@ -46,7 +46,7 @@ export default function ProfileScreen() {
         style={[
           styles.hero,
           {
-            paddingTop: (isWeb ? 67 : insets.top) + 20,
+            paddingTop: (isWeb ? 67 : insets.top) + 8,
             backgroundColor: colors.primary,
           },
         ]}

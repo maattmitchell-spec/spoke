@@ -45,7 +45,7 @@ export default function ExploreScreen() {
         style={[
           styles.headerBar,
           {
-            paddingTop: topPad + 12,
+            paddingTop: topPad + 6,
             backgroundColor: colors.background,
             borderBottomColor: colors.border,
           },
@@ -129,16 +129,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 20,
-    paddingBottom: 14,
+    paddingBottom: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   filterScroll: {
     borderBottomWidth: StyleSheet.hairlineWidth,
+    flexShrink: 0,
   },
   filterRow: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     gap: 8,
+    alignItems: "center",
   },
   filterChip: {
     paddingHorizontal: 16,

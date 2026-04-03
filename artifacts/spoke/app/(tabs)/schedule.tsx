@@ -27,7 +27,7 @@ export default function ScheduleScreen() {
         style={[
           styles.headerBar,
           {
-            paddingTop: (isWeb ? 67 : insets.top) + 12,
+            paddingTop: (isWeb ? 67 : insets.top) + 6,
             backgroundColor: colors.background,
             borderBottomColor: colors.border,
           },
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   headerBar: {
     paddingHorizontal: 20,
-    paddingBottom: 14,
+    paddingBottom: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     alignItems: "baseline",
