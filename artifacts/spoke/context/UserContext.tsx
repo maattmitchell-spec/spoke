@@ -17,12 +17,14 @@ export interface UserProfile {
   location: string;
   joinedYear: number;
   authProvider: "email" | "google" | "apple";
+  avatarUri?: string;
 }
 
 interface UserContextType {
   profile: UserProfile | null;
   isRegistered: boolean;
   saveProfile: (p: UserProfile, password?: string) => void;
+  updateAvatar: (uri: string) => void;
   requireAccount: (onReady: () => void) => void;
   verifySignIn: (email: string, password: string) => Promise<UserProfile | null>;
 }
@@ -47,6 +49,15 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     setProfile(p);
     AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(p));
     if (password) AsyncStorage.setItem(PASSWORD_KEY, password);
+  }, []);
+
+  const updateAvatar = useCallback((uri: string) => {
+    setProfile((prev) => {
+      if (!prev) return prev;
+      const updated = { ...prev, avatarUri: uri };
+      AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
+      return updated;
+    });
   }, []);
 
   const verifySignIn = useCallback(
@@ -102,6 +113,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         profile,
         isRegistered: !!profile,
         saveProfile,
+        updateAvatar,
         requireAccount,
         verifySignIn,
       }}

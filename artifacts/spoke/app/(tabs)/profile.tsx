@@ -1,6 +1,9 @@
 import { Feather } from "@expo/vector-icons";
-import React from "react";
+import { Image } from "expo-image";
+import * as ImagePicker from "expo-image-picker";
+import React, { useCallback } from "react";
 import {
+  Alert,
   Platform,
   ScrollView,
   StyleSheet,
@@ -53,8 +56,42 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { joinedCount } = useEvents();
   const { preference, setPreference } = useTheme();
-  const { profile, requireAccount } = useUser();
+  const { profile, requireAccount, updateAvatar } = useUser();
   const isWeb = Platform.OS === "web";
+
+  const handlePickAvatar = useCallback(() => {
+    if (!profile) {
+      requireAccount(() => {});
+      return;
+    }
+    const launch = async () => {
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert(
+            "Permission needed",
+            "Allow photo library access to set a profile picture.",
+          );
+          return;
+        }
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5,
+        base64: true,
+      });
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+        const uri = asset.base64
+          ? `data:image/jpeg;base64,${asset.base64}`
+          : asset.uri;
+        updateAvatar(uri);
+      }
+    };
+    launch();
+  }, [profile, requireAccount, updateAvatar]);
 
   const displayName = profile?.name ?? "Your Name";
   const initials = profile ? getInitials(profile.name) : "YO";
@@ -90,13 +127,36 @@ export default function ProfileScreen() {
         </View>
 
         <TouchableOpacity
-          activeOpacity={profile ? 1 : 0.8}
-          onPress={profile ? undefined : () => requireAccount(() => {})}
-          style={styles.avatarLarge}
+          activeOpacity={0.85}
+          onPress={handlePickAvatar}
+          style={styles.avatarWrap}
         >
-          <Text style={[styles.avatarLargeText, { color: colors.primaryForeground }]}>
-            {initials}
-          </Text>
+          {profile?.avatarUri ? (
+            <Image
+              source={{ uri: profile.avatarUri }}
+              style={styles.avatarLarge}
+              contentFit="cover"
+              transition={200}
+            />
+          ) : (
+            <View
+              style={[
+                styles.avatarLarge,
+                { backgroundColor: "rgba(255,255,255,0.2)" },
+              ]}
+            >
+              <Text
+                style={[styles.avatarLargeText, { color: colors.primaryForeground }]}
+              >
+                {initials}
+              </Text>
+            </View>
+          )}
+          {!!profile && (
+            <View style={[styles.cameraBadge, { backgroundColor: colors.card }]}>
+              <Feather name="camera" size={11} color={colors.foreground} />
+            </View>
+          )}
         </TouchableOpacity>
 
         <Text style={[styles.heroName, { color: colors.primaryForeground }]}>
@@ -317,18 +377,38 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
+  avatarWrap: {
+    width: 80,
+    height: 80,
+    marginBottom: 12,
+    position: "relative",
+  },
   avatarLarge: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: "rgba(255,255,255,0.2)",
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 12,
+    overflow: "hidden",
   },
   avatarLargeText: {
-    fontSize: 22,
+    fontSize: 24,
     fontFamily: "DMSans_700Bold",
+  },
+  cameraBadge: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
   },
   heroName: {
     fontSize: 24,
