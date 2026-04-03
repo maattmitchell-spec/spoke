@@ -56,6 +56,9 @@
     "zod-validation-error": "^3.4.0"
   },
   "dependencies": {
-    "@expo-google-fonts/dm-sans": "^0.4.2"
+    "@expo-google-fonts/dm-sans": "^0.4.2",
+    "expo-apple-authentication": "^8.0.8",
+    "expo-auth-session": "^7.0.10",
+    "expo-crypto": "^15.0.8"
   }
 }

@@ -13,20 +13,24 @@ import { JoinSpokeModal } from "@/components/JoinSpokeModal";
 
 export interface UserProfile {
   name: string;
+  email: string;
   location: string;
   joinedYear: number;
+  authProvider: "email" | "google" | "apple";
 }
 
 interface UserContextType {
   profile: UserProfile | null;
   isRegistered: boolean;
-  saveProfile: (p: UserProfile) => void;
+  saveProfile: (p: UserProfile, password?: string) => void;
   requireAccount: (onReady: () => void) => void;
+  verifySignIn: (email: string, password: string) => Promise<UserProfile | null>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
 
-const STORAGE_KEY = "spoke_user_profile";
+const PROFILE_KEY = "spoke_user_profile";
+const PASSWORD_KEY = "spoke_user_password";
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -34,15 +38,35 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const pendingCb = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    AsyncStorage.getItem(STORAGE_KEY).then((raw) => {
+    AsyncStorage.getItem(PROFILE_KEY).then((raw) => {
       if (raw) setProfile(JSON.parse(raw));
     });
   }, []);
 
-  const saveProfile = useCallback((p: UserProfile) => {
+  const saveProfile = useCallback((p: UserProfile, password?: string) => {
     setProfile(p);
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+    AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(p));
+    if (password) AsyncStorage.setItem(PASSWORD_KEY, password);
   }, []);
+
+  const verifySignIn = useCallback(
+    async (email: string, password: string): Promise<UserProfile | null> => {
+      const [rawProfile, storedPw] = await Promise.all([
+        AsyncStorage.getItem(PROFILE_KEY),
+        AsyncStorage.getItem(PASSWORD_KEY),
+      ]);
+      if (!rawProfile) return null;
+      const stored: UserProfile = JSON.parse(rawProfile);
+      if (
+        stored.email.toLowerCase() === email.toLowerCase() &&
+        storedPw === password
+      ) {
+        return stored;
+      }
+      return null;
+    },
+    []
+  );
 
   const requireAccount = useCallback(
     (onReady: () => void) => {
@@ -57,8 +81,8 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   );
 
   const handleSave = useCallback(
-    (p: UserProfile) => {
-      saveProfile(p);
+    (p: UserProfile, password?: string) => {
+      saveProfile(p, password);
       setModalVisible(false);
       const cb = pendingCb.current;
       pendingCb.current = null;
@@ -74,7 +98,13 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <UserContext.Provider
-      value={{ profile, isRegistered: !!profile, saveProfile, requireAccount }}
+      value={{
+        profile,
+        isRegistered: !!profile,
+        saveProfile,
+        requireAccount,
+        verifySignIn,
+      }}
     >
       {children}
       <Modal
@@ -83,7 +113,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         animationType="slide"
         onRequestClose={handleDismiss}
       >
-        <JoinSpokeModal onSave={handleSave} onDismiss={handleDismiss} />
+        <JoinSpokeModal
+          onSave={handleSave}
+          onDismiss={handleDismiss}
+          verifySignIn={verifySignIn}
+        />
       </Modal>
     </UserContext.Provider>
   );
