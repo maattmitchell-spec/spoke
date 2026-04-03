@@ -18,10 +18,10 @@ import { useEvents } from "@/context/EventsContext";
 import type { EventType } from "@/constants/data";
 
 const TYPE_BG: Record<EventType, string> = {
-  ride: "#1B4332",
-  run: "#1D3557",
-  hike: "#3D2B1F",
-  meetup: "#2D2417",
+  ride: "#CC2E00",
+  run: "#CC4400",
+  hike: "#A83200",
+  meetup: "#B84500",
 };
 
 const TYPE_LABEL: Record<EventType, string> = {
