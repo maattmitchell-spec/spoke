@@ -57,42 +57,43 @@ export default function ExploreScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.filterRow}
-        style={[styles.filterScroll, { borderBottomColor: colors.border }]}
-      >
-        {FILTERS.map((f) => (
-          <TouchableOpacity
-            key={f.key}
-            activeOpacity={0.7}
-            onPress={() => setFilter(f.key)}
-            style={[
-              styles.filterChip,
-              {
-                backgroundColor:
-                  filter === f.key ? colors.primary : colors.secondary,
-                borderRadius: 20,
-              },
-            ]}
-          >
-            <Text
+      <View style={[styles.filterStrip, { borderBottomColor: colors.border }]}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.filterRow}
+        >
+          {FILTERS.map((f) => (
+            <TouchableOpacity
+              key={f.key}
+              activeOpacity={0.7}
+              onPress={() => setFilter(f.key)}
               style={[
-                styles.filterText,
+                styles.filterChip,
                 {
-                  color:
-                    filter === f.key
-                      ? colors.primaryForeground
-                      : colors.foreground,
+                  backgroundColor:
+                    filter === f.key ? colors.primary : colors.secondary,
+                  borderRadius: 20,
                 },
               ]}
             >
-              {f.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+              <Text
+                style={[
+                  styles.filterText,
+                  {
+                    color:
+                      filter === f.key
+                        ? colors.primaryForeground
+                        : colors.foreground,
+                  },
+                ]}
+              >
+                {f.label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
       <FlatList
         data={filtered}
@@ -132,15 +133,16 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  filterScroll: {
+  filterStrip: {
+    height: 52,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    flexShrink: 0,
+    justifyContent: "center",
   },
   filterRow: {
     paddingHorizontal: 16,
-    paddingVertical: 10,
     gap: 8,
     alignItems: "center",
+    height: 52,
   },
   filterChip: {
     paddingHorizontal: 16,
