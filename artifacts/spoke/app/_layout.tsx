@@ -14,6 +14,7 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ChatProvider } from "@/context/ChatContext";
 import { EventsProvider } from "@/context/EventsContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 
@@ -28,6 +29,10 @@ function RootLayoutNav() {
       <Stack.Screen
         name="event/[id]"
         options={{ headerShown: false, presentation: "modal" }}
+      />
+      <Stack.Screen
+        name="event/chat/[id]"
+        options={{ headerShown: false, presentation: "card" }}
       />
     </Stack>
   );
@@ -57,7 +62,9 @@ export default function RootLayout() {
             <GestureHandlerRootView>
               <KeyboardProvider>
                 <EventsProvider>
-                  <RootLayoutNav />
+                  <ChatProvider>
+                    <RootLayoutNav />
+                  </ChatProvider>
                 </EventsProvider>
               </KeyboardProvider>
             </GestureHandlerRootView>

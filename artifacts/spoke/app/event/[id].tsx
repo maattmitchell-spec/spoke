@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useColors } from "@/hooks/useColors";
 import { useEvents } from "@/context/EventsContext";
+import { useChat } from "@/context/ChatContext";
 import type { EventType } from "@/constants/data";
 
 const TYPE_BG: Record<EventType, string> = {
@@ -42,6 +43,7 @@ export default function EventDetailScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const { events, toggleJoin } = useEvents();
+  const { getUnreadCount } = useChat();
   const isWeb = Platform.OS === "web";
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -265,6 +267,48 @@ export default function EventDetailScreen() {
               </View>
             ))}
           </View>
+
+          {event.isJoined && (
+            <>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
+                Group Chat
+              </Text>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => router.push(`/event/chat/${event.id}` as any)}
+                style={[
+                  styles.chatCard,
+                  {
+                    backgroundColor: colors.card,
+                    borderColor: colors.border,
+                    borderRadius: colors.radius,
+                  },
+                ]}
+              >
+                <View style={[styles.chatIcon, { backgroundColor: colors.secondary }]}>
+                  <Feather name="message-circle" size={20} color={colors.primary} />
+                </View>
+                <View style={styles.chatInfo}>
+                  <Text style={[styles.chatTitle, { color: colors.foreground }]}>
+                    {event.title}
+                  </Text>
+                  <Text style={[styles.chatSub, { color: colors.mutedForeground }]}>
+                    {event.attendees} member{event.attendees !== 1 ? "s" : ""} going
+                  </Text>
+                </View>
+                <View style={styles.chatRight}>
+                  {getUnreadCount(event.id) > 0 && (
+                    <View style={[styles.badge, { backgroundColor: colors.primary }]}>
+                      <Text style={[styles.badgeText, { color: colors.primaryForeground }]}>
+                        {getUnreadCount(event.id)}
+                      </Text>
+                    </View>
+                  )}
+                  <Feather name="chevron-right" size={18} color={colors.mutedForeground} />
+                </View>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
       </ScrollView>
 
@@ -470,6 +514,50 @@ const styles = StyleSheet.create({
   tagText: {
     fontSize: 12,
     fontFamily: "DMSans_500Medium",
+  },
+  chatCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    padding: 14,
+    borderWidth: 1,
+  },
+  chatIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+  },
+  chatInfo: {
+    flex: 1,
+    gap: 2,
+  },
+  chatTitle: {
+    fontSize: 14,
+    fontFamily: "DMSans_600SemiBold",
+  },
+  chatSub: {
+    fontSize: 12,
+    fontFamily: "DMSans_400Regular",
+  },
+  chatRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  badge: {
+    minWidth: 20,
+    height: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 5,
+  },
+  badgeText: {
+    fontSize: 11,
+    fontFamily: "DMSans_700Bold",
   },
   footer: {
     position: "absolute",
