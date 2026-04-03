@@ -1,0 +1,20 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "X2OBSD6rT-1-f2C3Cc4Wr"
+uri = "file://artifacts/spoke/assets/images/icon.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "v3FxSrxKgeoADZF5GfCER"
+uri = "file://artifacts/spoke/assets/images/trail-hero.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "oeJDRLHQTHfxIhzWpIMKM"
+uri = "file://artifacts/spoke/assets/images/ride-hero.png"
+type = "image"
+title = "generated_image"
