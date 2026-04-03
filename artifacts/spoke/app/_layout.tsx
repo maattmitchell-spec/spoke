@@ -17,6 +17,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ChatProvider } from "@/context/ChatContext";
 import { EventsProvider } from "@/context/EventsContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { UserProvider } from "@/context/UserContext";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -62,9 +63,11 @@ export default function RootLayout() {
             <GestureHandlerRootView>
               <KeyboardProvider>
                 <EventsProvider>
-                  <ChatProvider>
-                    <RootLayoutNav />
-                  </ChatProvider>
+                  <UserProvider>
+                    <ChatProvider>
+                      <RootLayoutNav />
+                    </ChatProvider>
+                  </UserProvider>
                 </EventsProvider>
               </KeyboardProvider>
             </GestureHandlerRootView>

@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColors } from "@/hooks/useColors";
 import { useEvents } from "@/context/EventsContext";
 import { useChat } from "@/context/ChatContext";
+import { useUser } from "@/context/UserContext";
 import type { EventType } from "@/constants/data";
 
 const TYPE_BG: Record<EventType, string> = {
@@ -44,6 +45,7 @@ export default function EventDetailScreen() {
   const insets = useSafeAreaInsets();
   const { events, toggleJoin } = useEvents();
   const { getUnreadCount } = useChat();
+  const { requireAccount } = useUser();
   const isWeb = Platform.OS === "web";
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
@@ -61,12 +63,14 @@ export default function EventDetailScreen() {
   const spotsLeft = event.maxAttendees - event.attendees;
 
   const handleJoin = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-    Animated.sequence([
-      Animated.timing(scaleAnim, { toValue: 0.96, duration: 80, useNativeDriver: true }),
-      Animated.timing(scaleAnim, { toValue: 1, duration: 140, useNativeDriver: true }),
-    ]).start();
-    toggleJoin(event.id);
+    requireAccount(() => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+      Animated.sequence([
+        Animated.timing(scaleAnim, { toValue: 0.96, duration: 80, useNativeDriver: true }),
+        Animated.timing(scaleAnim, { toValue: 1, duration: 140, useNativeDriver: true }),
+      ]).start();
+      toggleJoin(event.id);
+    });
   };
 
   return (

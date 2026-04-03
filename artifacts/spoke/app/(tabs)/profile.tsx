@@ -14,6 +14,7 @@ import { BikeWheelIcon } from "@/components/SpokeWordmark";
 import { useColors } from "@/hooks/useColors";
 import { useTheme } from "@/context/ThemeContext";
 import { useEvents } from "@/context/EventsContext";
+import { useUser } from "@/context/UserContext";
 
 const STATS = [
   { label: "Rides", value: "12" },
@@ -37,12 +38,32 @@ const THEME_ICONS: Record<ThemeOption, string> = {
   system: "monitor",
 };
 
+function getInitials(name: string) {
+  return name
+    .trim()
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("");
+}
+
 export default function ProfileScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const { joinedCount } = useEvents();
   const { preference, setPreference } = useTheme();
+  const { profile, requireAccount } = useUser();
   const isWeb = Platform.OS === "web";
+
+  const displayName = profile?.name ?? "Your Name";
+  const initials = profile ? getInitials(profile.name) : "YO";
+  const locationLine = [
+    profile?.location,
+    profile ? `Member since ${profile.joinedYear}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ") || "San Francisco, CA · Member since 2024";
 
   return (
     <ScrollView
@@ -68,18 +89,35 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.avatarLarge}>
+        <TouchableOpacity
+          activeOpacity={profile ? 1 : 0.8}
+          onPress={profile ? undefined : () => requireAccount(() => {})}
+          style={styles.avatarLarge}
+        >
           <Text style={[styles.avatarLargeText, { color: colors.primaryForeground }]}>
-            YO
+            {initials}
           </Text>
-        </View>
+        </TouchableOpacity>
 
         <Text style={[styles.heroName, { color: colors.primaryForeground }]}>
-          Your Name
+          {displayName}
         </Text>
         <Text style={[styles.heroLocation, { color: colors.primaryForeground + "AA" }]}>
-          San Francisco, CA · Member since 2024
+          {locationLine}
         </Text>
+
+        {!profile && (
+          <TouchableOpacity
+            activeOpacity={0.85}
+            onPress={() => requireAccount(() => {})}
+            style={[styles.setupBtn, { backgroundColor: "rgba(255,255,255,0.2)" }]}
+          >
+            <Feather name="user-plus" size={14} color={colors.primaryForeground} />
+            <Text style={[styles.setupBtnText, { color: colors.primaryForeground }]}>
+              Set up your profile
+            </Text>
+          </TouchableOpacity>
+        )}
 
         <View style={styles.statsRow}>
           {STATS.map((s) => (
@@ -301,7 +339,21 @@ const styles = StyleSheet.create({
   heroLocation: {
     fontSize: 13,
     fontFamily: "DMSans_400Regular",
-    marginBottom: 20,
+    marginBottom: 12,
+  },
+  setupBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginBottom: 12,
+    alignSelf: "flex-start",
+  },
+  setupBtnText: {
+    fontSize: 13,
+    fontFamily: "DMSans_500Medium",
   },
   statsRow: {
     flexDirection: "row",

@@ -12,6 +12,7 @@ import {
 } from "react-native";
 
 import { useColors } from "@/hooks/useColors";
+import { useUser } from "@/context/UserContext";
 import type { Event, EventType } from "@/constants/data";
 
 const TYPE_ICON: Record<EventType, { set: string; name: string }> = {
@@ -41,6 +42,7 @@ interface Props {
 
 export function EventCard({ event, onToggleJoin }: Props) {
   const colors = useColors();
+  const { requireAccount } = useUser();
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
   const handlePress = () => {
@@ -48,20 +50,22 @@ export function EventCard({ event, onToggleJoin }: Props) {
   };
 
   const handleJoin = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    Animated.sequence([
-      Animated.timing(scaleAnim, {
-        toValue: 0.94,
-        duration: 80,
-        useNativeDriver: true,
-      }),
-      Animated.timing(scaleAnim, {
-        toValue: 1,
-        duration: 120,
-        useNativeDriver: true,
-      }),
-    ]).start();
-    onToggleJoin(event.id);
+    requireAccount(() => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      Animated.sequence([
+        Animated.timing(scaleAnim, {
+          toValue: 0.94,
+          duration: 80,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleAnim, {
+          toValue: 1,
+          duration: 120,
+          useNativeDriver: true,
+        }),
+      ]).start();
+      onToggleJoin(event.id);
+    });
   };
 
   const spotsLeft = event.maxAttendees - event.attendees;
