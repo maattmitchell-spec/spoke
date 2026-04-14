@@ -1,9 +1,12 @@
 import { Feather, Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useRef } from "react";
 import {
   Animated,
+  Image,
+  ImageSourcePropType,
   Platform,
   ScrollView,
   Share,
@@ -20,11 +23,11 @@ import { useChat } from "@/context/ChatContext";
 import { useUser } from "@/context/UserContext";
 import type { EventType } from "@/constants/data";
 
-const TYPE_BG: Record<EventType, string> = {
-  ride: "#CC2E00",
-  run: "#CC4400",
-  hike: "#A83200",
-  meetup: "#B84500",
+const TYPE_IMAGES: Record<EventType, ImageSourcePropType> = {
+  ride: require("@/assets/ride_header.jpg"),
+  run: require("@/assets/run_header.jpg"),
+  hike: require("@/assets/hike_header.jpg"),
+  meetup: require("@/assets/meetup_header.jpg"),
 };
 
 const TYPE_LABEL: Record<EventType, string> = {
@@ -60,7 +63,6 @@ export default function EventDetailScreen() {
     );
   }
 
-  const heroBg = TYPE_BG[event.type];
   const spotsLeft = event.maxAttendees - event.attendees;
 
   const handleJoin = () => {
@@ -102,43 +104,53 @@ export default function EventDetailScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View
-        style={[
-          styles.hero,
-          { backgroundColor: heroBg, paddingTop: (isWeb ? 67 : insets.top) + 12 },
-        ]}
-      >
-        <View style={styles.heroTopRow}>
-          <TouchableOpacity
-            style={styles.heroIconBtn}
-            onPress={() => router.back()}
-            activeOpacity={0.7}
-          >
-            <Feather name="arrow-left" size={20} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.heroIconBtn}
-            onPress={handleShare}
-            activeOpacity={0.7}
-          >
-            <Feather name="share-2" size={19} color="#fff" />
-          </TouchableOpacity>
-        </View>
+      <View style={styles.hero}>
+        {/* Stock photo */}
+        <Image
+          source={TYPE_IMAGES[event.type]}
+          style={StyleSheet.absoluteFill}
+          resizeMode="cover"
+        />
+        {/* Dark gradient so text stays readable */}
+        <LinearGradient
+          colors={["rgba(0,0,0,0.28)", "rgba(0,0,0,0.72)"]}
+          style={StyleSheet.absoluteFill}
+        />
 
-        <View style={styles.heroContent}>
-          <View style={[styles.typeTag, { backgroundColor: "rgba(255,255,255,0.15)" }]}>
-            <Text style={styles.typeTagText}>{TYPE_LABEL[event.type]}</Text>
+        {/* Content sits on top of photo + gradient */}
+        <View style={{ paddingTop: (isWeb ? 67 : insets.top) + 12, paddingHorizontal: 20, paddingBottom: 28, gap: 0 }}>
+          <View style={styles.heroTopRow}>
+            <TouchableOpacity
+              style={styles.heroIconBtn}
+              onPress={() => router.back()}
+              activeOpacity={0.7}
+            >
+              <Feather name="arrow-left" size={20} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.heroIconBtn}
+              onPress={handleShare}
+              activeOpacity={0.7}
+            >
+              <Feather name="share-2" size={19} color="#fff" />
+            </TouchableOpacity>
           </View>
-          <Text style={styles.heroTitle}>{event.title}</Text>
-          <View style={styles.heroMeta}>
-            <Feather name="calendar" size={13} color="rgba(255,255,255,0.7)" />
-            <Text style={styles.heroMetaText}>
-              {event.date} · {event.time}
-            </Text>
-          </View>
-          <View style={styles.heroMeta}>
-            <Feather name="map-pin" size={13} color="rgba(255,255,255,0.7)" />
-            <Text style={styles.heroMetaText}>{event.location}</Text>
+
+          <View style={[styles.heroContent, { marginTop: 16 }]}>
+            <View style={[styles.typeTag, { backgroundColor: "rgba(255,255,255,0.18)" }]}>
+              <Text style={styles.typeTagText}>{TYPE_LABEL[event.type]}</Text>
+            </View>
+            <Text style={styles.heroTitle}>{event.title}</Text>
+            <View style={styles.heroMeta}>
+              <Feather name="calendar" size={13} color="rgba(255,255,255,0.7)" />
+              <Text style={styles.heroMetaText}>
+                {event.date} · {event.time}
+              </Text>
+            </View>
+            <View style={styles.heroMeta}>
+              <Feather name="map-pin" size={13} color="rgba(255,255,255,0.7)" />
+              <Text style={styles.heroMetaText}>{event.location}</Text>
+            </View>
           </View>
         </View>
       </View>
@@ -402,8 +414,8 @@ const styles = StyleSheet.create({
   container: { flex: 1 },
   center: { flex: 1, alignItems: "center", justifyContent: "center" },
   hero: {
-    paddingHorizontal: 20,
-    paddingBottom: 24,
+    overflow: "hidden",
+    minHeight: 240,
   },
   heroTopRow: {
     flexDirection: "row",
