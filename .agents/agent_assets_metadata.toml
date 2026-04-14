@@ -40,4 +40,22 @@ title = "hikers on rocky mountain summit with panoramic wilderness view"
 id = "WLWLG3RT-IYcXGiUGQ04B"
 uri = "file://attached_assets/stock_images/meetup_header.jpg"
 type = "image"
-title = "group of friends laughing at outdoor cafe table with coffee"
+title = "group of friends laughing together on outdoor patio terrace with drinks"
+
+[[outputs]]
+id = "9zwzNYlq-TJDKRhHQ3qxa"
+uri = "file://attached_assets/stock_images/meetup_header_1.jpg"
+type = "image"
+title = "diverse group friends sitting around outdoor patio table with drinks smiling sunlight"
+
+[[outputs]]
+id = "BL_vnnswW-065QJppUMci"
+uri = "file://attached_assets/stock_images/meetup_header_2.jpg"
+type = "image"
+title = "diverse group friends sitting around outdoor patio table with drinks smiling sunlight"
+
+[[outputs]]
+id = "10USYdNF7ztYhEhwHTWZP"
+uri = "file://attached_assets/stock_images/meetup_header_3.jpg"
+type = "image"
+title = "diverse group friends sitting around outdoor patio table with drinks smiling sunlight"
