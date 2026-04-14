@@ -142,33 +142,44 @@ const ASSETS: Asset[] = [
       ctx.lineTo(divX, 340);
       ctx.stroke();
 
-      // All text to the right of divider
+      // Centre section: wordmark + tagline
       const tx = divX + 56;
 
-      // Wordmark
       ctx.fillStyle = WHITE;
       ctx.font = "bold 96px DM Sans, sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("spoke", tx, 152);
 
-      // Tagline
       ctx.fillStyle = "rgba(255,255,255,0.65)";
       ctx.font = "32px DM Sans, sans-serif";
-      ctx.fillText("Curated outdoor adventures for remote workers", tx, 210);
+      ctx.fillText("Curated outdoor adventures", tx, 210);
+      ctx.fillText("for remote workers", tx, 252);
 
-      // Activity type pills in a row
-      const acts = ["🚴 Rides", "🏃 Runs", "🏔 Hikes", "☕ Meetups"];
-      ctx.font = "bold 26px DM Sans, sans-serif";
-      let px = tx;
-      acts.forEach((a) => {
-        const tw = ctx.measureText(a).width + 32;
-        ctx.fillStyle = "rgba(255,255,255,0.15)";
-        roundRect(ctx, px, 268, tw, 50, 25);
+      // Second divider before the activity column
+      const div2X = 1220;
+      ctx.strokeStyle = "rgba(255,255,255,0.2)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(div2X, 56);
+      ctx.lineTo(div2X, 340);
+      ctx.stroke();
+
+      // Right column: activity types stacked vertically
+      const acts: [string, string][] = [
+        ["🚴", "Rides"],
+        ["🏃", "Runs"],
+        ["🏔", "Hikes"],
+        ["☕", "Meetups"],
+      ];
+      const rx = div2X + 48;
+      ctx.font = "bold 30px DM Sans, sans-serif";
+      acts.forEach(([icon, label], i) => {
+        const y = 96 + i * 68;
+        ctx.fillStyle = "rgba(255,255,255,0.12)";
+        roundRect(ctx, rx, y, 260, 52, 10);
         ctx.fillStyle = WHITE;
-        ctx.textAlign = "center";
-        ctx.fillText(a, px + tw / 2, 300);
         ctx.textAlign = "left";
-        px += tw + 14;
+        ctx.fillText(`${icon}  ${label}`, rx + 16, y + 34);
       });
     },
   },
