@@ -108,39 +108,53 @@ const ASSETS: Asset[] = [
     platform: "LinkedIn",
     dimensions: "1584 × 396",
     w: 1584, h: 396,
-    draw(ctx) {
-      // White background
-      ctx.fillStyle = WHITE;
+    draw(ctx, _, logoWhite) {
+      // Gradient bg (left dark → right light)
+      const grad = ctx.createLinearGradient(0, 0, 1584, 396);
+      grad.addColorStop(0, GREEN_DARK);
+      grad.addColorStop(1, GREEN_LIGHT);
+      ctx.fillStyle = grad;
       ctx.fillRect(0, 0, 1584, 396);
 
-      // Subtle dot pattern overlay in green
-      ctx.fillStyle = "rgba(26,158,79,0.06)";
+      // Subtle dot pattern overlay
+      ctx.fillStyle = "rgba(255,255,255,0.04)";
       for (let x = 0; x < 1584; x += 48) {
         for (let y = 0; y < 396; y += 48) {
           ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
         }
       }
 
-      const tx = 476; // same start as when the logo + divider were present
+      // Shift offset — everything moves right by 80px
+      const offset = 80;
+
+      // Large logo — left side, vertically centered
+      const logoSize = 280;
+      const logoX = 80 + offset;
+      const logoY = (396 - logoSize) / 2;
+      ctx.drawImage(logoWhite, logoX, logoY, logoSize, logoSize);
+
+      // Vertical divider
+      const divX = 420 + offset;
+      ctx.strokeStyle = "rgba(255,255,255,0.25)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(divX, 56);
+      ctx.lineTo(divX, 340);
+      ctx.stroke();
+
+      // All text to the right of divider
+      const tx = divX + 56;
 
       // Wordmark
-      ctx.fillStyle = GREEN;
+      ctx.fillStyle = WHITE;
       ctx.font = "bold 96px DM Sans, sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("spoke", tx, 152);
 
-      // Thin underline accent beneath wordmark
-      ctx.strokeStyle = "rgba(26,158,79,0.3)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(tx, 168);
-      ctx.lineTo(tx + 300, 168);
-      ctx.stroke();
-
       // Tagline
-      ctx.fillStyle = "rgba(26,158,79,0.72)";
-      ctx.font = "34px DM Sans, sans-serif";
-      ctx.fillText("Curated outdoor adventures for remote workers", tx, 220);
+      ctx.fillStyle = "rgba(255,255,255,0.65)";
+      ctx.font = "32px DM Sans, sans-serif";
+      ctx.fillText("Curated outdoor adventures for remote workers", tx, 210);
 
       // Activity type pills in a row
       const acts = ["🚴 Rides", "🏃 Runs", "🏔 Hikes", "☕ Meetups"];
@@ -148,11 +162,11 @@ const ASSETS: Asset[] = [
       let px = tx;
       acts.forEach((a) => {
         const tw = ctx.measureText(a).width + 32;
-        ctx.fillStyle = "rgba(26,158,79,0.12)";
-        roundRect(ctx, px, 272, tw, 50, 25);
-        ctx.fillStyle = GREEN;
+        ctx.fillStyle = "rgba(255,255,255,0.15)";
+        roundRect(ctx, px, 268, tw, 50, 25);
+        ctx.fillStyle = WHITE;
         ctx.textAlign = "center";
-        ctx.fillText(a, px + tw / 2, 304);
+        ctx.fillText(a, px + tw / 2, 300);
         ctx.textAlign = "left";
         px += tw + 14;
       });
