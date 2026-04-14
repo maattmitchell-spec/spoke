@@ -123,7 +123,7 @@ export default function SignInScreen() {
     return (
       <View style={[styles.root, { backgroundColor: colors.background, paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 }]}>
         <View style={styles.logoRow}>
-          <BikeWheelIcon size={44} color={GREEN} />
+          <BikeWheelIcon size={28} color={GREEN} />
           <Text style={[styles.wordmark, { color: colors.foreground }]}>spoke</Text>
         </View>
         <Text style={[styles.title, { color: colors.foreground }]}>Check your email</Text>
@@ -168,7 +168,7 @@ export default function SignInScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.logoRow}>
-          <BikeWheelIcon size={44} color={GREEN} />
+          <BikeWheelIcon size={28} color={GREEN} />
           <Text style={[styles.wordmark, { color: colors.foreground }]}>spoke</Text>
         </View>
 
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   wordmark: {
-    fontSize: 28,
+    fontSize: 22,
     fontFamily: "DMSans_700Bold",
     letterSpacing: -0.5,
   },
