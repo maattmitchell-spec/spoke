@@ -175,7 +175,7 @@ const ASSETS: Asset[] = [
       const rx = div2X + 48;
       ctx.font = "bold 30px DM Sans, sans-serif";
       acts.forEach(([icon, label], i) => {
-        const y = 96 + i * 68;
+        const y = 70 + i * 68;
         ctx.fillStyle = "rgba(255,255,255,0.12)";
         roundRect(ctx, rx, y, 260, 52, 10);
         ctx.fillStyle = WHITE;
