@@ -1,6 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -57,7 +58,7 @@ export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { joinedCount } = useEvents();
   const { preference, setPreference } = useTheme();
-  const { profile, requireAccount, updateAvatar, updateBio } = useUser();
+  const { profile, requireAccount, updateAvatar, updateHeader, updateBio } = useUser();
   const isWeb = Platform.OS === "web";
 
   const handlePickAvatar = useCallback(() => {
@@ -93,6 +94,37 @@ export default function ProfileScreen() {
     };
     launch();
   }, [profile, requireAccount, updateAvatar]);
+
+  const handlePickHeader = useCallback(() => {
+    if (!profile) {
+      requireAccount(() => {});
+      return;
+    }
+    const launch = async () => {
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert("Permission needed", "Allow photo library access to set a cover photo.");
+          return;
+        }
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [3, 1],
+        quality: 0.65,
+        base64: true,
+      });
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+        const uri = asset.base64
+          ? `data:image/jpeg;base64,${asset.base64}`
+          : asset.uri;
+        updateHeader(uri);
+      }
+    };
+    launch();
+  }, [profile, requireAccount, updateHeader]);
 
   const BIO_MAX = 200;
   const DEFAULT_BIO = "Remote worker. Weekend adventurer. Always looking for the next great trail or road.";
@@ -144,17 +176,45 @@ export default function ProfileScreen() {
       <View
         style={[
           styles.hero,
-          {
-            paddingTop: (isWeb ? 67 : insets.top) + 8,
-            backgroundColor: colors.primary,
-          },
+          { paddingTop: (isWeb ? 67 : insets.top) + 8 },
         ]}
       >
+        {profile?.headerUri ? (
+          <>
+            <Image
+              source={{ uri: profile.headerUri }}
+              style={StyleSheet.absoluteFill}
+              contentFit="cover"
+              transition={300}
+            />
+            <LinearGradient
+              colors={["rgba(0,0,0,0.18)", "rgba(0,0,0,0.62)"]}
+              style={StyleSheet.absoluteFill}
+            />
+          </>
+        ) : (
+          <View
+            style={[StyleSheet.absoluteFill, { backgroundColor: colors.primary }]}
+          />
+        )}
+
         <View style={styles.heroTop}>
-          <BikeWheelIcon size={22} color={colors.primaryForeground + "60"} />
-          <TouchableOpacity activeOpacity={0.7}>
-            <Feather name="settings" size={20} color={colors.primaryForeground} />
-          </TouchableOpacity>
+          <BikeWheelIcon size={22} color="rgba(255,255,255,0.55)" />
+          <View style={styles.heroTopRight}>
+            <TouchableOpacity
+              activeOpacity={0.75}
+              onPress={handlePickHeader}
+              style={[styles.coverBtn, { backgroundColor: "rgba(0,0,0,0.30)" }]}
+            >
+              <Feather name="image" size={14} color="#fff" />
+              <Text style={styles.coverBtnText}>
+                {profile?.headerUri ? "Change cover" : "Add cover"}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.7}>
+              <Feather name="settings" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
 
         <TouchableOpacity
@@ -462,12 +522,31 @@ const styles = StyleSheet.create({
   hero: {
     paddingHorizontal: 24,
     paddingBottom: 28,
+    overflow: "hidden",
   },
   heroTop: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 20,
+  },
+  heroTopRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  coverBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
+  },
+  coverBtnText: {
+    fontSize: 12,
+    fontFamily: "DMSans_500Medium",
+    color: "#fff",
   },
   avatarWrap: {
     width: 80,
