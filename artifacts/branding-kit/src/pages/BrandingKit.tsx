@@ -124,8 +124,8 @@ const ASSETS: Asset[] = [
         }
       }
 
-      // Shift offset — everything moves right by 80px
-      const offset = 80;
+      // Shift offset — logo + text block moved right
+      const offset = 150;
 
       // Large logo — left side, vertically centered
       const logoSize = 280;
