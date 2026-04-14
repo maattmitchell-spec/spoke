@@ -46,16 +46,52 @@ title = "group of friends laughing together on outdoor patio terrace with drinks
 id = "9zwzNYlq-TJDKRhHQ3qxa"
 uri = "file://attached_assets/stock_images/meetup_header_1.jpg"
 type = "image"
-title = "diverse group friends sitting around outdoor patio table with drinks smiling sunlight"
+title = "group of friends laughing around rustic wooden table outdoors"
 
 [[outputs]]
 id = "BL_vnnswW-065QJppUMci"
 uri = "file://attached_assets/stock_images/meetup_header_2.jpg"
 type = "image"
-title = "diverse group friends sitting around outdoor patio table with drinks smiling sunlight"
+title = "group of friends laughing around rustic wooden table outdoors"
 
 [[outputs]]
 id = "10USYdNF7ztYhEhwHTWZP"
 uri = "file://attached_assets/stock_images/meetup_header_3.jpg"
 type = "image"
-title = "diverse group friends sitting around outdoor patio table with drinks smiling sunlight"
+title = "group of friends laughing around rustic wooden table outdoors"
+
+[[outputs]]
+id = "YH-_ccU2Rmdl9TPFM4FAi"
+uri = "file://attached_assets/stock_images/ride_header_1.jpg"
+type = "image"
+title = "downhill mountain biker racing through forest trail with speed blur"
+
+[[outputs]]
+id = "QjHZsA41anKBKXBu6gZj3"
+uri = "file://attached_assets/stock_images/ride_header_2.jpg"
+type = "image"
+title = "downhill mountain biker racing through forest trail with speed blur"
+
+[[outputs]]
+id = "dHKbDrkKs7hVK-oUnKTXK"
+uri = "file://attached_assets/stock_images/ride_header_3.jpg"
+type = "image"
+title = "downhill mountain biker racing through forest trail with speed blur"
+
+[[outputs]]
+id = "66YFppknmuWkII1WveWjB"
+uri = "file://attached_assets/stock_images/meetup_friends_1.jpg"
+type = "image"
+title = "happy friends sitting together around table outdoors eating laughing socializing"
+
+[[outputs]]
+id = "p-fuGcIsQ-kDQsW1csj9x"
+uri = "file://attached_assets/stock_images/meetup_friends_2.jpg"
+type = "image"
+title = "happy friends sitting together around table outdoors eating laughing socializing"
+
+[[outputs]]
+id = "40AIM1f61hQ6Y-WU6i8qX"
+uri = "file://attached_assets/stock_images/meetup_friends_3.jpg"
+type = "image"
+title = "happy friends sitting together around table outdoors eating laughing socializing"
