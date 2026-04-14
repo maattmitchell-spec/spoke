@@ -65,8 +65,8 @@ const ASSETS: Asset[] = [
     draw(ctx, _, logoWhite) {
       ctx.fillStyle = GREEN;
       ctx.fillRect(0, 0, 800, 800);
-      // logo centered with generous padding (160px margin = 480px logo area)
-      ctx.drawImage(logoWhite, 160, 160, 480, 480);
+      // logo centered with 80px margin = 640px logo area
+      ctx.drawImage(logoWhite, 80, 80, 640, 640);
     },
   },
   {
