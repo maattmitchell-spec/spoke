@@ -1,5 +1,4 @@
 uploads = []
-outputs = []
 
 [[generated]]
 id = "X2OBSD6rT-1-f2C3Cc4Wr"
@@ -18,3 +17,27 @@ id = "oeJDRLHQTHfxIhzWpIMKM"
 uri = "file://artifacts/spoke/assets/images/ride-hero.png"
 type = "image"
 title = "generated_image"
+
+[[outputs]]
+id = "uaWUixK_xgxMgzNHWuxkC"
+uri = "file://attached_assets/stock_images/ride_header.jpg"
+type = "image"
+title = "mountain bikers riding gravel road at sunrise through forest"
+
+[[outputs]]
+id = "zhnpA5Mf6zNFQwpG6ofP3"
+uri = "file://attached_assets/stock_images/run_header.jpg"
+type = "image"
+title = "trail runner on mountain path with dramatic landscape view"
+
+[[outputs]]
+id = "kxVzHw3UxDKs07nWlF36g"
+uri = "file://attached_assets/stock_images/hike_header.jpg"
+type = "image"
+title = "hikers on rocky mountain summit with panoramic wilderness view"
+
+[[outputs]]
+id = "WLWLG3RT-IYcXGiUGQ04B"
+uri = "file://attached_assets/stock_images/meetup_header.jpg"
+type = "image"
+title = "group of friends laughing at outdoor cafe table with coffee"

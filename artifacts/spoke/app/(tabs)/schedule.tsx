@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { EventCard } from "@/components/EventCard";
+import { ScheduleCard } from "@/components/ScheduleCard";
 import { useColors } from "@/hooks/useColors";
 import { useEvents } from "@/context/EventsContext";
 
@@ -45,7 +45,7 @@ export default function ScheduleScreen() {
         data={joined}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <EventCard event={item} onToggleJoin={toggleJoin} />
+          <ScheduleCard event={item} onToggleJoin={toggleJoin} />
         )}
         contentContainerStyle={[
           styles.list,
