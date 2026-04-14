@@ -90,7 +90,7 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { preference, setPreference } = useTheme();
-  const { profile, requireAccount } = useUser();
+  const { profile, requireAccount, signOut } = useUser();
   const isWeb = Platform.OS === "web";
 
   return (
@@ -263,6 +263,7 @@ export default function SettingsScreen() {
           >
             <TouchableOpacity
               activeOpacity={0.7}
+              onPress={signOut}
               style={[styles.row, { justifyContent: "center" }]}
             >
               <Text style={[styles.dangerLabel, { color: "#DC2626" }]}>

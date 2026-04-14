@@ -29,6 +29,8 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
   - Community tab: Member directory
   - Profile tab: User stats, badges, settings
   - Event Detail: Full event info with join/leave action
+- **Auth**: Clerk (`@clerk/expo`) — email/password + Google + Apple OAuth. ClerkProvider wraps root layout. Custom auth screens at `app/(auth)/sign-in.tsx` and `app/(auth)/sign-up.tsx`. Signed-in users auto-redirect from auth routes to tabs.
+- **User profile**: `UserContext` syncs Clerk user data (name, email, avatar) with AsyncStorage extras (bio, header image, custom avatar). `requireAccount` redirects to sign-in when unauthenticated.
 - **State**: AsyncStorage-backed EventsContext for join state persistence
 - **Font**: DM Sans (400, 500, 600, 700) via `@expo-google-fonts/dm-sans`
 - **Colors**: Dark forest green primary (#2D6A4F light / #52B788 dark), warm earth accent (#E07B39), warm off-white background

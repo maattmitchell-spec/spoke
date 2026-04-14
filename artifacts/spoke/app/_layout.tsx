@@ -5,6 +5,8 @@ import {
   DMSans_700Bold,
   useFonts,
 } from "@expo-google-fonts/dm-sans";
+import { ClerkProvider, ClerkLoaded } from "@clerk/expo";
+import { tokenCache } from "@clerk/expo/token-cache";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -23,10 +25,13 @@ SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+
 function RootLayoutNav() {
   return (
     <Stack screenOptions={{ headerBackTitle: "Back" }}>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen
         name="event/[id]"
         options={{ headerShown: false, presentation: "modal" }}
@@ -56,24 +61,28 @@ export default function RootLayout() {
   if (!fontsLoaded && !fontError) return null;
 
   return (
-    <SafeAreaProvider>
-      <ErrorBoundary>
-        <ThemeProvider>
-          <QueryClientProvider client={queryClient}>
-            <GestureHandlerRootView>
-              <KeyboardProvider>
-                <EventsProvider>
-                  <UserProvider>
-                    <ChatProvider>
-                      <RootLayoutNav />
-                    </ChatProvider>
-                  </UserProvider>
-                </EventsProvider>
-              </KeyboardProvider>
-            </GestureHandlerRootView>
-          </QueryClientProvider>
-        </ThemeProvider>
-      </ErrorBoundary>
-    </SafeAreaProvider>
+    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <ClerkLoaded>
+        <SafeAreaProvider>
+          <ErrorBoundary>
+            <ThemeProvider>
+              <QueryClientProvider client={queryClient}>
+                <GestureHandlerRootView>
+                  <KeyboardProvider>
+                    <EventsProvider>
+                      <UserProvider>
+                        <ChatProvider>
+                          <RootLayoutNav />
+                        </ChatProvider>
+                      </UserProvider>
+                    </EventsProvider>
+                  </KeyboardProvider>
+                </GestureHandlerRootView>
+              </QueryClientProvider>
+            </ThemeProvider>
+          </ErrorBoundary>
+        </SafeAreaProvider>
+      </ClerkLoaded>
+    </ClerkProvider>
   );
 }

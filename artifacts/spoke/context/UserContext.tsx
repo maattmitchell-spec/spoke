@@ -1,3 +1,4 @@
+import { useAuth, useUser as useClerkUser } from "@clerk/expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, {
   createContext,
@@ -7,9 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Modal } from "react-native";
-
-import { JoinSpokeModal } from "@/components/JoinSpokeModal";
+import { useRouter } from "expo-router";
 
 export interface UserProfile {
   name: string;
@@ -25,136 +24,114 @@ export interface UserProfile {
 interface UserContextType {
   profile: UserProfile | null;
   isRegistered: boolean;
-  saveProfile: (p: UserProfile, password?: string) => void;
   updateAvatar: (uri: string) => void;
   updateHeader: (uri: string) => void;
   updateBio: (bio: string) => void;
   requireAccount: (onReady: () => void) => void;
-  verifySignIn: (email: string, password: string) => Promise<UserProfile | null>;
+  signOut: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
 
-const PROFILE_KEY = "spoke_user_profile";
-const PASSWORD_KEY = "spoke_user_password";
+const PROFILE_EXTRAS_KEY = "spoke_user_extras";
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const pendingCb = useRef<(() => void) | null>(null);
+  const { isSignedIn, signOut: clerkSignOut } = useAuth();
+  const { user: clerkUser } = useClerkUser();
+  const router = useRouter();
+
+  const [extras, setExtras] = useState<{
+    avatarUri?: string;
+    headerUri?: string;
+    bio?: string;
+    location?: string;
+  } | null>(null);
 
   useEffect(() => {
-    AsyncStorage.getItem(PROFILE_KEY).then((raw) => {
-      if (raw) setProfile(JSON.parse(raw));
+    AsyncStorage.getItem(PROFILE_EXTRAS_KEY).then((raw) => {
+      if (raw) setExtras(JSON.parse(raw));
+      else setExtras({});
     });
   }, []);
 
-  const saveProfile = useCallback((p: UserProfile, password?: string) => {
-    setProfile(p);
-    AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(p));
-    if (password) AsyncStorage.setItem(PASSWORD_KEY, password);
-  }, []);
-
-  const updateAvatar = useCallback((uri: string) => {
-    setProfile((prev) => {
-      if (!prev) return prev;
-      const updated = { ...prev, avatarUri: uri };
-      AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
-      return updated;
-    });
-  }, []);
-
-  const updateHeader = useCallback((uri: string) => {
-    setProfile((prev) => {
-      if (!prev) return prev;
-      const updated = { ...prev, headerUri: uri };
-      AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
-      return updated;
-    });
-  }, []);
-
-  const updateBio = useCallback((bio: string) => {
-    setProfile((prev) => {
-      if (!prev) return prev;
-      const updated = { ...prev, bio };
-      AsyncStorage.setItem(PROFILE_KEY, JSON.stringify(updated));
-      return updated;
-    });
-  }, []);
-
-  const verifySignIn = useCallback(
-    async (email: string, password: string): Promise<UserProfile | null> => {
-      const [rawProfile, storedPw] = await Promise.all([
-        AsyncStorage.getItem(PROFILE_KEY),
-        AsyncStorage.getItem(PASSWORD_KEY),
-      ]);
-      if (!rawProfile) return null;
-      const stored: UserProfile = JSON.parse(rawProfile);
-      if (
-        stored.email.toLowerCase() === email.toLowerCase() &&
-        storedPw === password
-      ) {
-        return stored;
-      }
-      return null;
+  const saveExtras = useCallback(
+    (updated: typeof extras) => {
+      setExtras(updated);
+      AsyncStorage.setItem(PROFILE_EXTRAS_KEY, JSON.stringify(updated));
     },
     []
   );
 
+  const profile: UserProfile | null =
+    isSignedIn && clerkUser && extras !== null
+      ? {
+          name:
+            clerkUser.fullName ||
+            clerkUser.firstName ||
+            clerkUser.username ||
+            clerkUser.emailAddresses[0]?.emailAddress?.split("@")[0] ||
+            "Spoke Member",
+          email: clerkUser.primaryEmailAddress?.emailAddress ?? "",
+          location: extras.location ?? "",
+          joinedYear: new Date(clerkUser.createdAt ?? Date.now()).getFullYear(),
+          authProvider: (clerkUser.externalAccounts?.[0]?.provider as any) ?? "email",
+          avatarUri: extras.avatarUri ?? clerkUser.imageUrl ?? undefined,
+          headerUri: extras.headerUri,
+          bio: extras.bio,
+        }
+      : null;
+
+  const updateAvatar = useCallback(
+    (uri: string) => {
+      saveExtras({ ...extras, avatarUri: uri });
+    },
+    [extras, saveExtras]
+  );
+
+  const updateHeader = useCallback(
+    (uri: string) => {
+      saveExtras({ ...extras, headerUri: uri });
+    },
+    [extras, saveExtras]
+  );
+
+  const updateBio = useCallback(
+    (bio: string) => {
+      saveExtras({ ...extras, bio });
+    },
+    [extras, saveExtras]
+  );
+
   const requireAccount = useCallback(
     (onReady: () => void) => {
-      if (profile) {
+      if (isSignedIn) {
         onReady();
       } else {
-        pendingCb.current = onReady;
-        setModalVisible(true);
+        router.push("/(auth)/sign-in");
       }
     },
-    [profile]
+    [isSignedIn, router]
   );
 
-  const handleSave = useCallback(
-    (p: UserProfile, password?: string) => {
-      saveProfile(p, password);
-      setModalVisible(false);
-      const cb = pendingCb.current;
-      pendingCb.current = null;
-      cb?.();
-    },
-    [saveProfile]
-  );
-
-  const handleDismiss = useCallback(() => {
-    pendingCb.current = null;
-    setModalVisible(false);
-  }, []);
+  const signOut = useCallback(async () => {
+    await clerkSignOut();
+    setExtras({});
+    router.replace("/(auth)/sign-in");
+  }, [clerkSignOut, router]);
 
   return (
     <UserContext.Provider
       value={{
         profile,
         isRegistered: !!profile,
-        saveProfile,
         updateAvatar,
         updateHeader,
         updateBio,
         requireAccount,
-        verifySignIn,
+        signOut,
       }}
     >
       {children}
-      <Modal
-        visible={modalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={handleDismiss}
-      >
-        <JoinSpokeModal
-          onSave={handleSave}
-          onDismiss={handleDismiss}
-          verifySignIn={verifySignIn}
-        />
-      </Modal>
     </UserContext.Provider>
   );
 }
