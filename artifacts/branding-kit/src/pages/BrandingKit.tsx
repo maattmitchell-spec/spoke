@@ -443,8 +443,23 @@ export default function BrandingKit() {
   const logoRef = useRef<HTMLImageElement | null>(null);
   const logoWhiteRef = useRef<HTMLImageElement | null>(null);
 
+  // Ensure every asset in ASSETS has a state entry (guards against HMR additions)
   useEffect(() => {
-    // Pre-load both logo variants
+    setAssets((prev) => {
+      const next = { ...prev };
+      let changed = false;
+      ASSETS.forEach((a) => {
+        if (!next[a.id]) {
+          next[a.id] = { dataUrl: null, generating: false };
+          changed = true;
+        }
+      });
+      return changed ? next : prev;
+    });
+  }, []);
+
+  useEffect(() => {
+    // Pre-load both logo variants then generate all assets
     Promise.all([
       svgToImage(hubSpokeSvg(GREEN, 100)),
       svgToImage(hubSpokeSvg(WHITE, 100)),
@@ -482,7 +497,7 @@ export default function BrandingKit() {
   }
 
   function handleDownload(asset: Asset) {
-    const state = assets[asset.id];
+    const state = assets[asset.id] ?? { dataUrl: null, generating: false };
     if (!state.dataUrl) return;
     const a = document.createElement("a");
     a.download = `spoke-${asset.id}-${asset.w}x${asset.h}.png`;
@@ -644,7 +659,7 @@ export default function BrandingKit() {
                 }}
               >
                 {platformAssets.map((asset) => {
-                  const state = assets[asset.id];
+                  const state = assets[asset.id] ?? { dataUrl: null, generating: false };
                   const aspect = (asset.h / asset.w) * 100;
                   const cappedAspect = Math.min(aspect, 70);
 
