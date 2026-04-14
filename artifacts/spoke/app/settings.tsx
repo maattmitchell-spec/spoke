@@ -41,10 +41,26 @@ const INFO_CONTENT: Record<
     title: "Privacy",
     body: (
       <>
-        <InfoLine icon="lock" text="Your account data is stored securely with Clerk." />
-        <InfoLine icon="smartphone" text="Activity and profile extras are stored locally on your device only — nothing is sent to a server." />
-        <InfoLine icon="eye-off" text="Your location is used only to display your city on your profile. It is never shared." />
-        <InfoLine icon="trash-2" text="Deleting your account removes all locally stored data." />
+        <InfoLine
+          icon="lock"
+          text="Your sign-in credentials are handled by Clerk — an industry-standard auth platform. Spoke never stores your password."
+        />
+        <InfoLine
+          icon="smartphone"
+          text="Your profile, activity history, and preferences live entirely on your device. No data is sent to or stored on a Spoke server."
+        />
+        <InfoLine
+          icon="eye-off"
+          text="Your location is a display label only — it shows your city on your profile and is never tracked, logged, or shared with anyone."
+        />
+        <InfoLine
+          icon="shield"
+          text="We don't run ads, sell your data, or build behavioural profiles. You are not the product."
+        />
+        <InfoLine
+          icon="trash-2"
+          text="Signing out and uninstalling the app permanently removes all locally stored data from your device."
+        />
       </>
     ),
   },
@@ -52,10 +68,26 @@ const INFO_CONTENT: Record<
     title: "About Spoke",
     body: (
       <>
-        <InfoLine icon="compass" text="Spoke is a community for remote workers who love getting outside — rides, runs, hikes, and meetups." />
-        <InfoLine icon="map-pin" text="All adventures are curated locally. No feeds, no noise — just good people and good routes." />
-        <InfoLine icon="code" text="Version 1.0 · Built with Expo & React Native." />
-        <InfoLine icon="heart" text="Made with care for remote adventurers everywhere." />
+        <InfoLine
+          icon="compass"
+          text="Spoke was built for remote workers who refuse to let a great work setup get in the way of a great adventure."
+        />
+        <InfoLine
+          icon="wind"
+          text="Find curated rides, runs, hikes, and meetups near you — handpicked for people who know that the best meetings happen on a trail."
+        />
+        <InfoLine
+          icon="users"
+          text="Every event on Spoke is hosted by a real person in your area. Show up, move together, and build the kind of community you actually want."
+        />
+        <InfoLine
+          icon="zap"
+          text="No algorithm. No sponsored content. No noise. Just the next adventure — and the people who are going."
+        />
+        <InfoLine
+          icon="code"
+          text="Version 1.0 · Built with Expo & React Native · Made for remote adventurers everywhere."
+        />
       </>
     ),
   },
