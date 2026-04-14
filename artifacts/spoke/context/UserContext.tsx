@@ -27,6 +27,7 @@ interface UserContextType {
   updateAvatar: (uri: string) => void;
   updateHeader: (uri: string) => void;
   updateBio: (bio: string) => void;
+  updateProfile: (name: string, location: string) => void;
   requireAccount: (onReady: () => void) => void;
   signOut: () => Promise<void>;
 }
@@ -45,6 +46,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     headerUri?: string;
     bio?: string;
     location?: string;
+    displayName?: string;
   } | null>(null);
 
   useEffect(() => {
@@ -66,6 +68,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     isSignedIn && clerkUser && extras !== null
       ? {
           name:
+            extras.displayName ||
             clerkUser.fullName ||
             clerkUser.firstName ||
             clerkUser.username ||
@@ -102,6 +105,13 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     [extras, saveExtras]
   );
 
+  const updateProfile = useCallback(
+    (displayName: string, location: string) => {
+      saveExtras({ ...extras, displayName: displayName.trim(), location: location.trim() });
+    },
+    [extras, saveExtras]
+  );
+
   const requireAccount = useCallback(
     (onReady: () => void) => {
       if (isSignedIn) {
@@ -127,6 +137,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         updateAvatar,
         updateHeader,
         updateBio,
+        updateProfile,
         requireAccount,
         signOut,
       }}
