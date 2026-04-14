@@ -35,78 +35,42 @@ type InfoSheet = "privacy" | "about" | "saved-routes" | null;
 
 const INFO_CONTENT: Record<
   Exclude<InfoSheet, null>,
-  { title: string; body: React.ReactNode }
+  { title: string; lines: { icon: string; text: string }[] }
 > = {
   privacy: {
     title: "Privacy",
-    body: (
-      <>
-        <InfoLine
-          icon="lock"
-          text="Your sign-in credentials are handled by Clerk — an industry-standard auth platform. Spoke never stores your password."
-        />
-        <InfoLine
-          icon="smartphone"
-          text="Your profile, activity history, and preferences live entirely on your device. No data is sent to or stored on a Spoke server."
-        />
-        <InfoLine
-          icon="eye-off"
-          text="Your location is a display label only — it shows your city on your profile and is never tracked, logged, or shared with anyone."
-        />
-        <InfoLine
-          icon="shield"
-          text="We don't run ads, sell your data, or build behavioural profiles. You are not the product."
-        />
-        <InfoLine
-          icon="trash-2"
-          text="Signing out and uninstalling the app permanently removes all locally stored data from your device."
-        />
-      </>
-    ),
+    lines: [
+      { icon: "lock",      text: "Your sign-in credentials are handled by Clerk — an industry-standard auth platform. Spoke never stores your password." },
+      { icon: "smartphone",text: "Your profile, activity history, and preferences live entirely on your device. No data is sent to or stored on a Spoke server." },
+      { icon: "eye-off",   text: "Your location is a display label only — it shows your city on your profile and is never tracked, logged, or shared with anyone." },
+      { icon: "shield",    text: "We don't run ads, sell your data, or build behavioural profiles. You are not the product." },
+      { icon: "trash-2",   text: "Signing out and uninstalling the app permanently removes all locally stored data from your device." },
+    ],
   },
   about: {
     title: "About Spoke",
-    body: (
-      <>
-        <InfoLine
-          icon="compass"
-          text="Spoke was built for remote workers who refuse to let a great work setup get in the way of a great adventure."
-        />
-        <InfoLine
-          icon="wind"
-          text="Find curated rides, runs, hikes, and meetups near you — handpicked for people who know that the best meetings happen on a trail."
-        />
-        <InfoLine
-          icon="users"
-          text="Every event on Spoke is hosted by a real person in your area. Show up, move together, and build the kind of community you actually want."
-        />
-        <InfoLine
-          icon="zap"
-          text="No algorithm. No sponsored content. No noise. Just the next adventure — and the people who are going."
-        />
-        <InfoLine
-          icon="code"
-          text="Version 1.0 · Built with Expo & React Native · Made for remote adventurers everywhere."
-        />
-      </>
-    ),
+    lines: [
+      { icon: "compass", text: "Spoke was built for remote workers who refuse to let a great work setup get in the way of a great adventure." },
+      { icon: "wind",    text: "Find curated rides, runs, hikes, and meetups near you — handpicked for people who know that the best meetings happen on a trail." },
+      { icon: "users",   text: "Every event on Spoke is hosted by a real person in your area. Show up, move together, and build the kind of community you actually want." },
+      { icon: "zap",     text: "No algorithm. No sponsored content. No noise. Just the next adventure — and the people who are going." },
+      { icon: "code",    text: "Version 1.0 · Built with Expo & React Native · Made for remote adventurers everywhere." },
+    ],
   },
   "saved-routes": {
     title: "Saved Routes",
-    body: (
-      <>
-        <InfoLine icon="map" text="Save your favourite rides, runs, and hike routes for quick access." />
-        <InfoLine icon="clock" text="Route saving is coming in the next update — stay tuned!" />
-      </>
-    ),
+    lines: [
+      { icon: "map",   text: "Save your favourite rides, runs, and hike routes for quick access." },
+      { icon: "clock", text: "Route saving is coming in the next update — stay tuned!" },
+    ],
   },
 };
 
-function InfoLine({ icon, text }: { icon: string; text: string }) {
+function InfoLine({ icon, text, textColor }: { icon: string; text: string; textColor: string }) {
   return (
     <View style={infoStyles.row}>
       <Feather name={icon as any} size={15} color="#1A9E4F" style={infoStyles.icon} />
-      <Text style={infoStyles.text}>{text}</Text>
+      <Text style={[infoStyles.text, { color: textColor }]}>{text}</Text>
     </View>
   );
 }
@@ -538,9 +502,14 @@ export default function SettingsScreen() {
                 <Text style={[styles.modalTitle, { color: colors.foreground }]}>
                   {INFO_CONTENT[activeSheet].title}
                 </Text>
-                <View style={{ color: colors.mutedForeground } as any}>
-                  {INFO_CONTENT[activeSheet].body}
-                </View>
+                {INFO_CONTENT[activeSheet].lines.map((line, i) => (
+                  <InfoLine
+                    key={i}
+                    icon={line.icon}
+                    text={line.text}
+                    textColor={colors.foreground}
+                  />
+                ))}
               </>
             )}
             <TouchableOpacity
