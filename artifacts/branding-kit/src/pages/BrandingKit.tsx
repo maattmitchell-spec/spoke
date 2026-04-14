@@ -170,6 +170,83 @@ const ASSETS: Asset[] = [
     },
   },
   {
+    id: "li-banner-2",
+    label: "Banner — Trail & Crew",
+    platform: "LinkedIn",
+    dimensions: "1584 × 396",
+    w: 1584, h: 396,
+    draw(ctx, _, logoWhite) {
+      // Deep dark green bg with a lighter right fade
+      const grad = ctx.createLinearGradient(0, 0, 1584, 0);
+      grad.addColorStop(0, "#071810");
+      grad.addColorStop(0.55, GREEN_DARK);
+      grad.addColorStop(1, GREEN);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 1584, 396);
+
+      // Subtle concentric-arc texture on the right
+      ctx.strokeStyle = "rgba(255,255,255,0.06)";
+      ctx.lineWidth = 60;
+      for (let r = 200; r <= 700; r += 160) {
+        ctx.beginPath();
+        ctx.arc(1584, 396, r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // Small "spoke" wordmark + icon — top-left corner
+      ctx.drawImage(logoWhite, 56, 44, 72, 72);
+      ctx.fillStyle = WHITE;
+      ctx.font = "bold 38px DM Sans, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("spoke", 144, 93);
+
+      // Thin horizontal rule below the logo strip
+      ctx.strokeStyle = "rgba(255,255,255,0.15)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(56, 136);
+      ctx.lineTo(700, 136);
+      ctx.stroke();
+
+      // Hero headline — two lines, large
+      ctx.fillStyle = WHITE;
+      ctx.font = "bold 88px DM Sans, sans-serif";
+      ctx.fillText("Find your trail.", 56, 240);
+      ctx.fillText("Find your crew.", 56, 338);
+
+      // Vertical divider
+      ctx.strokeStyle = "rgba(255,255,255,0.2)";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(1040, 60);
+      ctx.lineTo(1040, 336);
+      ctx.stroke();
+
+      // Right panel — activity list + tagline
+      const rx = 1080;
+
+      ctx.fillStyle = "rgba(255,255,255,0.5)";
+      ctx.font = "26px DM Sans, sans-serif";
+      ctx.fillText("Adventures for remote workers", rx, 108);
+
+      const acts: [string, string][] = [
+        ["🚴", "Rides"],
+        ["🏃", "Runs"],
+        ["🏔", "Hikes"],
+        ["☕", "Meetups"],
+      ];
+      ctx.font = "bold 30px DM Sans, sans-serif";
+      acts.forEach(([icon, label], i) => {
+        const y = 168 + i * 56;
+        ctx.fillStyle = "rgba(255,255,255,0.12)";
+        roundRect(ctx, rx, y, 400, 46, 10);
+        ctx.fillStyle = WHITE;
+        ctx.textAlign = "left";
+        ctx.fillText(`${icon}  ${label}`, rx + 20, y + 31);
+      });
+    },
+  },
+  {
     id: "li-post",
     label: "Post Image",
     platform: "LinkedIn",
