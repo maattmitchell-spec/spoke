@@ -78,7 +78,7 @@ const ASSETS: Asset[] = [
     draw(ctx, logoGreen) {
       ctx.fillStyle = WHITE;
       ctx.fillRect(0, 0, 800, 800);
-      ctx.drawImage(logoGreen, 160, 160, 480, 480);
+      ctx.drawImage(logoGreen, 80, 80, 640, 640);
     },
   },
   // ── LinkedIn ──────────────────────────────────────────────────────────────
