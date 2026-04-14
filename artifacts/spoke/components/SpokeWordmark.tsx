@@ -21,36 +21,44 @@ export function BikeWheelIcon({
   const colors = useColors();
   const c = color ?? colors.primary;
 
-  // 100×100 internal viewBox — hub-and-spoke network icon
-  // Hub
-  const hx = 50, hy = 50, hr = 11;
-  // Satellites: [cx, cy, r]
-  const nodes: [number, number, number][] = [
-    [20, 22, 7],   // top-left  (small)
-    [80, 20, 14],  // top-right (large)
-    [16, 50, 7],   // left      (small)
-    [18, 78, 14],  // bot-left  (large)
-    [82, 74, 7],   // bot-right (small)
-  ];
-  const sw = 4;
+  // 100×100 viewBox — filled hub-and-spoke, 6 satellites at 60° intervals
+  const hx = 50, hy = 50;
+  const hubR = 13;
+  const nodeR = 8;
+  const spokeLen = 34; // center-to-center distance
+  const sw = 6; // spoke line width
+
+  // 6 evenly-spaced satellites starting at 0° (right), stepping 60° CCW
+  // SVG y-axis is flipped, so sin is negated for "up"
+  const satellites = Array.from({ length: 6 }, (_, i) => {
+    const deg = i * 60;
+    const rad = (deg * Math.PI) / 180;
+    return {
+      cx: hx + spokeLen * Math.cos(rad),
+      cy: hy - spokeLen * Math.sin(rad),
+    };
+  });
 
   return (
     <Svg width={size} height={size} viewBox="0 0 100 100">
-      {/* Spokes — drawn first so circles sit on top */}
-      {nodes.map(([cx, cy], i) => (
+      {/* Filled spokes drawn first so circles sit on top */}
+      {satellites.map((s, i) => (
         <Line
           key={i}
-          x1={hx} y1={hy} x2={cx} y2={cy}
-          stroke={c} strokeWidth={sw} strokeLinecap="round"
+          x1={hx} y1={hy}
+          x2={s.cx} y2={s.cy}
+          stroke={c}
+          strokeWidth={sw}
+          strokeLinecap="round"
         />
       ))}
 
-      {/* Hub */}
-      <Circle cx={hx} cy={hy} r={hr} stroke={c} strokeWidth={sw} fill="none" />
+      {/* Filled hub */}
+      <Circle cx={hx} cy={hy} r={hubR} fill={c} />
 
-      {/* Satellite nodes */}
-      {nodes.map(([cx, cy, r], i) => (
-        <Circle key={i} cx={cx} cy={cy} r={r} stroke={c} strokeWidth={sw} fill="none" />
+      {/* Filled satellite dots */}
+      {satellites.map((s, i) => (
+        <Circle key={i} cx={s.cx} cy={s.cy} r={nodeR} fill={c} />
       ))}
     </Svg>
   );
