@@ -12,7 +12,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 
-import { EventCard } from "@/components/EventCard";
+import { ScheduleCard } from "@/components/ScheduleCard";
 import { SpokeWordmark } from "@/components/SpokeWordmark";
 import { useColors } from "@/hooks/useColors";
 import { useEvents } from "@/context/EventsContext";
@@ -113,7 +113,7 @@ export default function ExploreScreen() {
         data={filtered}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <EventCard event={item} onToggleJoin={toggleJoin} />
+          <ScheduleCard event={item} onToggleJoin={toggleJoin} />
         )}
         contentContainerStyle={[
           styles.list,
