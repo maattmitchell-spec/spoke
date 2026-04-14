@@ -124,38 +124,38 @@ const ASSETS: Asset[] = [
         }
       }
 
-      const mx = 80; // left margin
+      const tx = 476; // same start as when the logo + divider were present
 
       // Wordmark
       ctx.fillStyle = WHITE;
-      ctx.font = "bold 108px DM Sans, sans-serif";
+      ctx.font = "bold 96px DM Sans, sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("spoke", mx, 162);
+      ctx.fillText("spoke", tx, 152);
 
       // Thin underline accent beneath wordmark
       ctx.strokeStyle = "rgba(255,255,255,0.3)";
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(mx, 178);
-      ctx.lineTo(mx + 340, 178);
+      ctx.moveTo(tx, 168);
+      ctx.lineTo(tx + 300, 168);
       ctx.stroke();
 
       // Tagline
       ctx.fillStyle = "rgba(255,255,255,0.72)";
-      ctx.font = "36px DM Sans, sans-serif";
-      ctx.fillText("Curated outdoor adventures for remote workers", mx, 232);
+      ctx.font = "34px DM Sans, sans-serif";
+      ctx.fillText("Curated outdoor adventures for remote workers", tx, 220);
 
       // Activity type pills in a row
       const acts = ["🚴 Rides", "🏃 Runs", "🏔 Hikes", "☕ Meetups"];
-      ctx.font = "bold 27px DM Sans, sans-serif";
-      let px = mx;
+      ctx.font = "bold 26px DM Sans, sans-serif";
+      let px = tx;
       acts.forEach((a) => {
-        const tw = ctx.measureText(a).width + 36;
+        const tw = ctx.measureText(a).width + 32;
         ctx.fillStyle = "rgba(255,255,255,0.15)";
-        roundRect(ctx, px, 284, tw, 52, 26);
+        roundRect(ctx, px, 272, tw, 50, 25);
         ctx.fillStyle = WHITE;
         ctx.textAlign = "center";
-        ctx.fillText(a, px + tw / 2, 318);
+        ctx.fillText(a, px + tw / 2, 304);
         ctx.textAlign = "left";
         px += tw + 14;
       });
