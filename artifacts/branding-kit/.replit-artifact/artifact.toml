@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/branding-kit/"
+title = "Spoke Branding Kit"
+version = "1.0.0"
+id = "artifacts/branding-kit"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/branding-kit/" ]
+localPort = 20567
+
+[services.development]
+run = "pnpm --filter @workspace/branding-kit run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/branding-kit", "run", "build" ]
+publicDir = "artifacts/branding-kit/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20567"
+BASE_PATH = "/branding-kit/"
