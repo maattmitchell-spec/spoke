@@ -124,17 +124,17 @@ const ASSETS: Asset[] = [
         }
       }
 
-      // Section boundaries
-      const div1X = 500;
-      const div2X = 1220;
+      // Shift offset — everything moves right by 80px
+      const offset = 80;
 
-      // Large logo — horizontally & vertically centered in the left zone
-      const logoSize = 260;
-      const logoX = (div1X - logoSize) / 2;
+      // Large logo — left side, vertically centered
+      const logoSize = 280;
+      const logoX = 80 + offset;
       const logoY = (396 - logoSize) / 2;
       ctx.drawImage(logoWhite, logoX, logoY, logoSize, logoSize);
 
-      // Divider 1
+      // Vertical divider
+      const div1X = 420 + offset;
       ctx.strokeStyle = "rgba(255,255,255,0.25)";
       ctx.lineWidth = 1.5;
       ctx.beginPath();
@@ -142,18 +142,20 @@ const ASSETS: Asset[] = [
       ctx.lineTo(div1X, 340);
       ctx.stroke();
 
-      // Centre section: wordmark + tagline, centred between the two dividers
-      const cx = div1X + (div2X - div1X) / 2; // horizontal centre of the middle zone
+      const div2X = 1220;
+
+      // Centre section: wordmark + tagline
+      const tx = div1X + 56;
 
       ctx.fillStyle = WHITE;
       ctx.font = "bold 96px DM Sans, sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillText("spoke", cx, 160);
+      ctx.textAlign = "left";
+      ctx.fillText("spoke", tx, 152);
 
       ctx.fillStyle = "rgba(255,255,255,0.65)";
-      ctx.font = "30px DM Sans, sans-serif";
-      ctx.fillText("Curated outdoor adventures", cx, 218);
-      ctx.fillText("for remote workers", cx, 258);
+      ctx.font = "32px DM Sans, sans-serif";
+      ctx.fillText("Curated outdoor adventures", tx, 210);
+      ctx.fillText("for remote workers", tx, 252);
 
       // Second divider before the activity column
       ctx.strokeStyle = "rgba(255,255,255,0.2)";
