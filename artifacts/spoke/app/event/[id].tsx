@@ -6,6 +6,7 @@ import {
   Animated,
   Platform,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -73,6 +74,32 @@ export default function EventDetailScreen() {
     });
   };
 
+  const handleShare = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const lines = [
+      `${event.title}`,
+      ``,
+      `📅  ${event.date} at ${event.time}`,
+      `📍  ${event.location}`,
+      ...(event.distance ? [`🏁  ${event.distance}${event.elevation ? `  ·  ${event.elevation} gain` : ""}`] : []),
+      ``,
+      event.description,
+      ``,
+      `Join me on Spoke — the app for outdoor adventures with your crew.`,
+    ];
+    try {
+      await Share.share(
+        {
+          title: event.title,
+          message: lines.join("\n"),
+        },
+        { dialogTitle: `Share ${event.title}` }
+      );
+    } catch {
+      // user cancelled — no-op
+    }
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View
@@ -81,13 +108,22 @@ export default function EventDetailScreen() {
           { backgroundColor: heroBg, paddingTop: (isWeb ? 67 : insets.top) + 12 },
         ]}
       >
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => router.back()}
-          activeOpacity={0.7}
-        >
-          <Feather name="arrow-left" size={20} color="#fff" />
-        </TouchableOpacity>
+        <View style={styles.heroTopRow}>
+          <TouchableOpacity
+            style={styles.heroIconBtn}
+            onPress={() => router.back()}
+            activeOpacity={0.7}
+          >
+            <Feather name="arrow-left" size={20} color="#fff" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.heroIconBtn}
+            onPress={handleShare}
+            activeOpacity={0.7}
+          >
+            <Feather name="share-2" size={19} color="#fff" />
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.heroContent}>
           <View style={[styles.typeTag, { backgroundColor: "rgba(255,255,255,0.15)" }]}>
@@ -369,12 +405,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 24,
   },
-  backBtn: {
+  heroTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  heroIconBtn: {
     width: 36,
     height: 36,
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 16,
+    backgroundColor: "rgba(0,0,0,0.18)",
+    borderRadius: 18,
   },
   heroContent: { gap: 6 },
   typeTag: {
