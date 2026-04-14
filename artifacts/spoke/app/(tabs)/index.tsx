@@ -10,6 +10,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 
 import { EventCard } from "@/components/EventCard";
 import { SpokeWordmark } from "@/components/SpokeWordmark";
@@ -30,6 +31,7 @@ const FILTERS: { key: Filter; label: string }[] = [
 export default function ExploreScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const { events, toggleJoin } = useEvents();
   const [filter, setFilter] = useState<Filter>("all");
 
@@ -52,9 +54,21 @@ export default function ExploreScreen() {
         ]}
       >
         <SpokeWordmark size={28} />
-        <TouchableOpacity activeOpacity={0.7}>
-          <Feather name="search" size={22} color={colors.foreground} />
-        </TouchableOpacity>
+        <View style={styles.headerRight}>
+          <TouchableOpacity activeOpacity={0.7}>
+            <Feather name="search" size={22} color={colors.foreground} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => router.push("/create-event")}
+            style={[styles.createBtn, { backgroundColor: colors.primary }]}
+          >
+            <Feather name="plus" size={16} color={colors.primaryForeground} />
+            <Text style={[styles.createBtnText, { color: colors.primaryForeground }]}>
+              New
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={[styles.filterStrip, { borderBottomColor: colors.border }]}>
@@ -132,6 +146,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  headerRight: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  createBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    paddingHorizontal: 13,
+    paddingVertical: 7,
+    borderRadius: 20,
+  },
+  createBtnText: {
+    fontSize: 13,
+    fontFamily: "DMSans_600SemiBold",
   },
   filterStrip: {
     height: 52,
