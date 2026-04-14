@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Svg, { Circle, Line, Rect } from "react-native-svg";
+import Svg, { Circle, Line } from "react-native-svg";
 
 import { useColors } from "@/hooks/useColors";
 
@@ -23,58 +23,49 @@ export function BikeWheelIcon({
   const cx = size / 2;
   const cy = size / 2;
 
-  const knobCount = 18;
-  const knobH = size * 0.1;
-  const knobW = size * 0.072;
-  const tireStroke = size * 0.058;
+  const treadStroke = size * 0.09;
+  const tireStroke = size * 0.07;
+  const gap = size * 0.012;
 
-  const rimR = size / 2 - knobH - tireStroke / 2 - size * 0.015;
-  const hubR = size * 0.07;
+  const treadR = size / 2 - treadStroke / 2 - 0.5;
+  const tireR = treadR - treadStroke / 2 - tireStroke / 2 - gap;
+  const hubR = size * 0.075;
+
   const spokeCount = 14;
-
-  const knobBaseR = rimR + tireStroke / 2 - 0.5;
-
   const spokes = Array.from({ length: spokeCount }, (_, i) => {
     const angle = (i * Math.PI * 2) / spokeCount;
     return {
       x1: cx + Math.cos(angle) * hubR * 1.7,
       y1: cy + Math.sin(angle) * hubR * 1.7,
-      x2: cx + Math.cos(angle) * (rimR - tireStroke * 0.3),
-      y2: cy + Math.sin(angle) * (rimR - tireStroke * 0.3),
+      x2: cx + Math.cos(angle) * (tireR - tireStroke * 0.35),
+      y2: cy + Math.sin(angle) * (tireR - tireStroke * 0.35),
     };
   });
 
-  const knobs = Array.from({ length: knobCount }, (_, i) => {
-    const angleDeg = (i * 360) / knobCount;
-    const isMain = i % 2 === 0;
-    const h = isMain ? knobH : knobH * 0.72;
-    const w = isMain ? knobW : knobW * 0.78;
-    return { angleDeg, h, w };
-  });
+  const dashLen = size * 0.088;
+  const gapLen = size * 0.058;
 
   return (
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <Circle
         cx={cx}
         cy={cy}
-        r={rimR}
+        r={tireR}
         stroke={c}
         strokeWidth={tireStroke}
         fill="none"
       />
 
-      {knobs.map(({ angleDeg, h, w }, i) => (
-        <Rect
-          key={i}
-          x={cx - w / 2}
-          y={cy - knobBaseR - h}
-          width={w}
-          height={h + tireStroke * 0.4}
-          rx={w * 0.35}
-          fill={c}
-          transform={`rotate(${angleDeg} ${cx} ${cy})`}
-        />
-      ))}
+      <Circle
+        cx={cx}
+        cy={cy}
+        r={treadR}
+        stroke={c}
+        strokeWidth={treadStroke}
+        fill="none"
+        strokeDasharray={`${dashLen} ${gapLen}`}
+        strokeLinecap="round"
+      />
 
       {spokes.map((s, i) => (
         <Line
