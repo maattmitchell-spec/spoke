@@ -1,11 +1,15 @@
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
+  KeyboardAvoidingView,
+  Modal,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -22,13 +26,6 @@ const THEME_ICONS: Record<ThemeOption, string> = {
   dark: "moon",
   system: "monitor",
 };
-
-const ACCOUNT_ITEMS = [
-  { icon: "user", label: "Edit profile" },
-  { icon: "lock", label: "Change password" },
-  { icon: "bell", label: "Notifications" },
-  { icon: "shield", label: "Privacy" },
-];
 
 const APP_ITEMS = [
   { icon: "map", label: "Saved routes" },
@@ -90,8 +87,32 @@ export default function SettingsScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { preference, setPreference } = useTheme();
-  const { profile, requireAccount, signOut } = useUser();
+  const { profile, requireAccount, signOut, updateProfile } = useUser();
   const isWeb = Platform.OS === "web";
+
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [draftName, setDraftName] = useState("");
+  const [draftLocation, setDraftLocation] = useState("");
+
+  const handleOpenEditProfile = useCallback(() => {
+    if (!profile) { requireAccount(() => {}); return; }
+    setDraftName(profile.name);
+    setDraftLocation(profile.location);
+    setEditingProfile(true);
+  }, [profile, requireAccount]);
+
+  const handleSaveProfile = useCallback(() => {
+    if (!draftName.trim()) return;
+    updateProfile(draftName, draftLocation);
+    setEditingProfile(false);
+  }, [draftName, draftLocation, updateProfile]);
+
+  const ACCOUNT_ITEMS = [
+    { icon: "user", label: "Edit profile", onPress: handleOpenEditProfile },
+    { icon: "lock", label: "Change password", onPress: undefined },
+    { icon: "bell", label: "Notifications", onPress: undefined },
+    { icon: "shield", label: "Privacy", onPress: undefined },
+  ];
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -126,6 +147,7 @@ export default function SettingsScreen() {
           paddingTop: 8,
         }}
       >
+        {/* Appearance */}
         <View style={styles.section}>
           <SectionHeader title="Appearance" colors={colors} />
           <View
@@ -199,6 +221,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        {/* Account */}
         <View style={styles.section}>
           <SectionHeader title="Account" colors={colors} />
           <View
@@ -216,9 +239,7 @@ export default function SettingsScreen() {
                 key={item.label}
                 icon={item.icon}
                 label={item.label}
-                onPress={() => {
-                  if (!profile) requireAccount(() => {});
-                }}
+                onPress={item.onPress}
                 isLast={i === ACCOUNT_ITEMS.length - 1}
                 colors={colors}
               />
@@ -226,6 +247,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        {/* App */}
         <View style={styles.section}>
           <SectionHeader title="App" colors={colors} />
           <View
@@ -250,6 +272,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        {/* Sign out */}
         <View style={styles.section}>
           <View
             style={[
@@ -277,6 +300,84 @@ export default function SettingsScreen() {
           Spoke v1.0 · Made for remote adventurers
         </Text>
       </ScrollView>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        visible={editingProfile}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setEditingProfile(false)}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalOverlay}
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+        >
+          <Pressable style={StyleSheet.absoluteFill} onPress={() => setEditingProfile(false)} />
+          <View
+            style={[
+              styles.modalSheet,
+              { backgroundColor: colors.background, paddingBottom: insets.bottom + 16 },
+            ]}
+          >
+            <View style={[styles.modalHandle, { backgroundColor: colors.border }]} />
+
+            <Text style={[styles.modalTitle, { color: colors.foreground }]}>
+              Edit Profile
+            </Text>
+
+            <Text style={[styles.modalLabel, { color: colors.foreground }]}>Name</Text>
+            <View style={[styles.modalInput, { borderColor: colors.border, backgroundColor: colors.card }]}>
+              <TextInput
+                style={[styles.modalInputText, { color: colors.foreground }]}
+                value={draftName}
+                onChangeText={setDraftName}
+                placeholder="Your name"
+                placeholderTextColor={colors.mutedForeground}
+                autoCapitalize="words"
+                autoCorrect={false}
+                returnKeyType="next"
+              />
+            </View>
+
+            <Text style={[styles.modalLabel, { color: colors.foreground }]}>Location</Text>
+            <View style={[styles.modalInput, { borderColor: colors.border, backgroundColor: colors.card }]}>
+              <Feather name="map-pin" size={15} color={colors.mutedForeground} style={{ marginRight: 8 }} />
+              <TextInput
+                style={[styles.modalInputText, { color: colors.foreground, flex: 1 }]}
+                value={draftLocation}
+                onChangeText={setDraftLocation}
+                placeholder="City, State"
+                placeholderTextColor={colors.mutedForeground}
+                autoCapitalize="words"
+                autoCorrect={false}
+                returnKeyType="done"
+                onSubmitEditing={handleSaveProfile}
+              />
+            </View>
+
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={() => setEditingProfile(false)}
+                style={[styles.modalCancelBtn, { borderColor: colors.border }]}
+              >
+                <Text style={[styles.modalCancelText, { color: colors.foreground }]}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.85}
+                onPress={handleSaveProfile}
+                disabled={!draftName.trim()}
+                style={[
+                  styles.modalSaveBtn,
+                  { backgroundColor: colors.primary, opacity: draftName.trim() ? 1 : 0.45 },
+                ]}
+              >
+                <Text style={[styles.modalSaveText, { color: colors.primaryForeground }]}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </View>
   );
 }
@@ -361,5 +462,74 @@ const styles = StyleSheet.create({
     fontFamily: "DMSans_400Regular",
     textAlign: "center",
     marginTop: 28,
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0,0,0,0.4)",
+  },
+  modalSheet: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingHorizontal: 24,
+    paddingTop: 12,
+  },
+  modalHandle: {
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: "DMSans_700Bold",
+    letterSpacing: -0.5,
+    marginBottom: 24,
+  },
+  modalLabel: {
+    fontSize: 13,
+    fontFamily: "DMSans_600SemiBold",
+    marginBottom: 6,
+  },
+  modalInput: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1.5,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 13,
+    marginBottom: 16,
+  },
+  modalInputText: {
+    fontSize: 15,
+    fontFamily: "DMSans_400Regular",
+    flex: 1,
+  },
+  modalActions: {
+    flexDirection: "row",
+    gap: 12,
+    marginTop: 8,
+  },
+  modalCancelBtn: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    alignItems: "center",
+  },
+  modalCancelText: {
+    fontSize: 15,
+    fontFamily: "DMSans_600SemiBold",
+  },
+  modalSaveBtn: {
+    flex: 2,
+    paddingVertical: 14,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  modalSaveText: {
+    fontSize: 15,
+    fontFamily: "DMSans_600SemiBold",
   },
 });
