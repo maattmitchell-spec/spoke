@@ -20,67 +20,59 @@ export function BikeWheelIcon({
 }) {
   const colors = useColors();
   const c = color ?? colors.primary;
-  const cx = size / 2;
-  const cy = size / 2;
 
-  const treadStroke = size * 0.09;
-  const tireStroke = size * 0.07;
-  const gap = size * 0.012;
+  // All coordinates are in a 100×100 internal viewBox, scaled by `size`
+  // Hub circle (left, larger)
+  const hubCx = 28;
+  const hubCy = 50;
+  const hubR = 17;
 
-  const treadR = size / 2 - treadStroke / 2 - 0.5;
-  const tireR = treadR - treadStroke / 2 - tireStroke / 2 - gap;
-  const hubR = size * 0.075;
+  // Top-right circle
+  const topCx = 74;
+  const topCy = 14;
+  const nodeR = 13;
 
-  const spokeCount = 14;
-  const spokes = Array.from({ length: spokeCount }, (_, i) => {
-    const angle = (i * Math.PI * 2) / spokeCount;
-    return {
-      x1: cx + Math.cos(angle) * hubR * 1.7,
-      y1: cy + Math.sin(angle) * hubR * 1.7,
-      x2: cx + Math.cos(angle) * (tireR - tireStroke * 0.35),
-      y2: cy + Math.sin(angle) * (tireR - tireStroke * 0.35),
-    };
-  });
+  // Bottom-right circle
+  const botCx = 74;
+  const botCy = 86;
 
-  const dashLen = size * 0.088;
-  const gapLen = size * 0.058;
+  const sw = 7.5; // stroke width
 
   return (
-    <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <Circle
-        cx={cx}
-        cy={cy}
-        r={tireR}
+    <Svg width={size} height={size} viewBox="0 0 100 100">
+      {/* Connector lines drawn first so circles sit on top */}
+      <Line
+        x1={hubCx} y1={hubCy}
+        x2={topCx} y2={topCy}
         stroke={c}
-        strokeWidth={tireStroke}
-        fill="none"
+        strokeWidth={sw}
+        strokeLinecap="round"
       />
-
-      <Circle
-        cx={cx}
-        cy={cy}
-        r={treadR}
+      <Line
+        x1={hubCx} y1={hubCy}
+        x2={botCx} y2={botCy}
         stroke={c}
-        strokeWidth={treadStroke}
-        fill="none"
-        strokeDasharray={`${dashLen} ${gapLen}`}
+        strokeWidth={sw}
         strokeLinecap="round"
       />
 
-      {spokes.map((s, i) => (
-        <Line
-          key={i}
-          x1={s.x1}
-          y1={s.y1}
-          x2={s.x2}
-          y2={s.y2}
-          stroke={c}
-          strokeWidth={size * 0.024}
-          strokeLinecap="round"
-        />
-      ))}
+      {/* Hub circle */}
+      <Circle
+        cx={hubCx} cy={hubCy} r={hubR}
+        stroke={c} strokeWidth={sw} fill="none"
+      />
 
-      <Circle cx={cx} cy={cy} r={hubR * 1.45} fill={c} />
+      {/* Top circle */}
+      <Circle
+        cx={topCx} cy={topCy} r={nodeR}
+        stroke={c} strokeWidth={sw} fill="none"
+      />
+
+      {/* Bottom circle */}
+      <Circle
+        cx={botCx} cy={botCy} r={nodeR}
+        stroke={c} strokeWidth={sw} fill="none"
+      />
     </Svg>
   );
 }
