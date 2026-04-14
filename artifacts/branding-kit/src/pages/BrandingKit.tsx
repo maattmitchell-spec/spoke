@@ -55,6 +55,32 @@ type Asset = {
 };
 
 const ASSETS: Asset[] = [
+  // ── Icon Mark ─────────────────────────────────────────────────────────────
+  {
+    id: "icon-green",
+    label: "Icon — Green BG",
+    platform: "Icon Mark",
+    dimensions: "800 × 800",
+    w: 800, h: 800,
+    draw(ctx, _, logoWhite) {
+      ctx.fillStyle = GREEN;
+      ctx.fillRect(0, 0, 800, 800);
+      // logo centered with generous padding (160px margin = 480px logo area)
+      ctx.drawImage(logoWhite, 160, 160, 480, 480);
+    },
+  },
+  {
+    id: "icon-white",
+    label: "Icon — White BG",
+    platform: "Icon Mark",
+    dimensions: "800 × 800",
+    w: 800, h: 800,
+    draw(ctx, logoGreen) {
+      ctx.fillStyle = WHITE;
+      ctx.fillRect(0, 0, 800, 800);
+      ctx.drawImage(logoGreen, 160, 160, 480, 480);
+    },
+  },
   // ── LinkedIn ──────────────────────────────────────────────────────────────
   {
     id: "li-profile",
@@ -372,7 +398,7 @@ export default function BrandingKit() {
     ASSETS.forEach((asset) => handleDownload(asset));
   }
 
-  const platforms = ["LinkedIn", "Instagram"] as const;
+  const platforms = ["Icon Mark", "LinkedIn", "Instagram"] as const;
 
   return (
     <div
@@ -435,7 +461,7 @@ export default function BrandingKit() {
             fontFamily: "inherit",
           }}
         >
-          ⬇ Download All ({ASSETS.length} assets)
+          ↓ Download All ({ASSETS.length} assets)
         </button>
       </div>
 
