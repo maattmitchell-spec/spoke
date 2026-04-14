@@ -130,7 +130,7 @@ const ASSETS: Asset[] = [
 
       // Logo — centred on the divider line, vertically centred
       const logoSize = 210;
-      const logoX = div1X - logoSize / 2;
+      const logoX = div1X - logoSize - 16;
       const logoY = (396 - logoSize) / 2;
       ctx.drawImage(logoWhite, logoX, logoY, logoSize, logoSize);
 
