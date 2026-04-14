@@ -150,12 +150,12 @@ const ASSETS: Asset[] = [
       ctx.fillStyle = WHITE;
       ctx.font = "bold 96px DM Sans, sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("spoke", tx, 152);
+      ctx.fillText("spoke", tx, 178);
 
       ctx.fillStyle = "rgba(255,255,255,0.65)";
       ctx.font = "32px DM Sans, sans-serif";
-      ctx.fillText("Curated outdoor adventures", tx, 210);
-      ctx.fillText("for remote workers", tx, 252);
+      ctx.fillText("Curated outdoor adventures", tx, 236);
+      ctx.fillText("for remote workers", tx, 278);
 
       // Second divider before the activity column
       ctx.strokeStyle = "rgba(255,255,255,0.2)";
