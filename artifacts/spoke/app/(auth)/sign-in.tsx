@@ -1,7 +1,7 @@
 import { useSSO, useSignIn } from "@clerk/expo";
 import { Feather } from "@expo/vector-icons";
-import * as AuthSession from "expo-auth-session";
 import * as AppleAuthentication from "expo-apple-authentication";
+import * as AuthSession from "expo-auth-session";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
@@ -40,7 +40,6 @@ export default function SignInScreen() {
   const [mfaCode, setMfaCode] = React.useState("");
   const [needsMfa, setNeedsMfa] = React.useState(false);
 
-  // Warm up browser on Android
   useEffect(() => {
     if (Platform.OS !== "android") return;
     WebBrowser.warmUpAsync();
@@ -50,21 +49,13 @@ export default function SignInScreen() {
   const handleEmailSignIn = async () => {
     const { error } = await signIn.password({ emailAddress: email, password });
     if (error) return;
-
     if (signIn.status === "complete") {
       await signIn.finalize({
-        navigate: ({ decorateUrl }) => {
-          router.replace(decorateUrl("/") as any);
-        },
+        navigate: ({ decorateUrl }) => { router.replace(decorateUrl("/") as any); },
       });
     } else if (signIn.status === "needs_client_trust") {
-      const factor = signIn.supportedSecondFactors?.find(
-        (f) => f.strategy === "email_code"
-      );
-      if (factor) {
-        await signIn.mfa.sendEmailCode();
-        setNeedsMfa(true);
-      }
+      const factor = signIn.supportedSecondFactors?.find((f) => f.strategy === "email_code");
+      if (factor) { await signIn.mfa.sendEmailCode(); setNeedsMfa(true); }
     }
   };
 
@@ -72,9 +63,7 @@ export default function SignInScreen() {
     await signIn.mfa.verifyEmailCode({ code: mfaCode });
     if (signIn.status === "complete") {
       await signIn.finalize({
-        navigate: ({ decorateUrl }) => {
-          router.replace(decorateUrl("/") as any);
-        },
+        navigate: ({ decorateUrl }) => { router.replace(decorateUrl("/") as any); },
       });
     }
   };
@@ -88,9 +77,7 @@ export default function SignInScreen() {
       if (createdSessionId) {
         setActive!({
           session: createdSessionId,
-          navigate: async ({ decorateUrl }) => {
-            router.replace(decorateUrl("/") as any);
-          },
+          navigate: async ({ decorateUrl }) => { router.replace(decorateUrl("/") as any); },
         });
       }
     } catch (err) {
@@ -107,9 +94,7 @@ export default function SignInScreen() {
       if (createdSessionId) {
         setActive!({
           session: createdSessionId,
-          navigate: async ({ decorateUrl }) => {
-            router.replace(decorateUrl("/") as any);
-          },
+          navigate: async ({ decorateUrl }) => { router.replace(decorateUrl("/") as any); },
         });
       }
     } catch (err) {
@@ -167,6 +152,7 @@ export default function SignInScreen() {
         contentContainerStyle={[styles.root, { paddingTop: insets.top + 24, paddingBottom: insets.bottom + 32 }]}
         keyboardShouldPersistTaps="handled"
       >
+        {/* Logo */}
         <View style={styles.logoRow}>
           <BikeWheelIcon size={28} color={GREEN} />
           <Text style={[styles.wordmark, { color: colors.foreground }]}>spoke</Text>
@@ -177,32 +163,54 @@ export default function SignInScreen() {
           Sign in to find your next adventure
         </Text>
 
-        <View style={styles.socialRow}>
-          <Pressable
-            style={({ pressed }) => [styles.socialBtn, { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.75 : 1 }]}
-            onPress={handleGoogleSSO}
-          >
+        {/* Google */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.oauthBtn,
+            { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.75 : 1 },
+          ]}
+          onPress={handleGoogleSSO}
+        >
+          <View style={styles.googleLogoWrap}>
             <Text style={styles.googleG}>G</Text>
-            <Text style={[styles.socialBtnText, { color: colors.foreground }]}>Google</Text>
+          </View>
+          <Text style={[styles.oauthBtnText, { color: colors.foreground }]}>Continue with Google</Text>
+        </Pressable>
+
+        {/* Apple — native button on iOS, styled fallback on Android */}
+        {Platform.OS === "ios" ? (
+          <AppleAuthentication.AppleAuthenticationButton
+            buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+            buttonStyle={
+              colors.background === "#ffffff" || colors.background === "#FFFFFF"
+                ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE
+            }
+            cornerRadius={12}
+            style={styles.appleNativeBtn}
+            onPress={handleAppleSSO}
+          />
+        ) : (
+          <Pressable
+            style={({ pressed }) => [
+              styles.oauthBtn,
+              { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.75 : 1 },
+            ]}
+            onPress={handleAppleSSO}
+          >
+            <Feather name="smartphone" size={18} color={colors.foreground} />
+            <Text style={[styles.oauthBtnText, { color: colors.foreground }]}>Continue with Apple</Text>
           </Pressable>
+        )}
 
-          {Platform.OS === "ios" && (
-            <Pressable
-              style={({ pressed }) => [styles.socialBtn, { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.75 : 1 }]}
-              onPress={handleAppleSSO}
-            >
-              <Feather name="apple" size={17} color={colors.foreground} />
-              <Text style={[styles.socialBtnText, { color: colors.foreground }]}>Apple</Text>
-            </Pressable>
-          )}
-        </View>
-
+        {/* Divider */}
         <View style={styles.dividerRow}>
           <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
-          <Text style={[styles.dividerText, { color: colors.mutedForeground }]}>or</Text>
+          <Text style={[styles.dividerText, { color: colors.mutedForeground }]}>or sign in with email</Text>
           <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
         </View>
 
+        {/* Email */}
         <Text style={[styles.fieldLabel, { color: colors.foreground }]}>Email</Text>
         <View style={[styles.inputWrap, { borderColor: colors.border, backgroundColor: colors.card }]}>
           <TextInput
@@ -220,6 +228,7 @@ export default function SignInScreen() {
           <Text style={styles.errorText}>{errors.fields.identifier.message}</Text>
         )}
 
+        {/* Password */}
         <Text style={[styles.fieldLabel, { color: colors.foreground }]}>Password</Text>
         <View style={[styles.inputWrap, { borderColor: colors.border, backgroundColor: colors.card }]}>
           <TextInput
@@ -238,6 +247,7 @@ export default function SignInScreen() {
           <Text style={styles.errorText}>{errors.fields.password.message}</Text>
         )}
 
+        {/* Sign in */}
         <Pressable
           style={[styles.primaryBtn, { opacity: isLoading || !email || !password ? 0.5 : 1 }]}
           onPress={handleEmailSignIn}
@@ -289,36 +299,45 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 15,
     fontFamily: "DMSans_400Regular",
-    marginBottom: 28,
+    marginBottom: 24,
   },
-  socialRow: {
-    flexDirection: "row",
-    gap: 12,
-    marginBottom: 20,
-  },
-  socialBtn: {
-    flex: 1,
+  oauthBtn: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
-    paddingVertical: 13,
+    gap: 10,
+    paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1.5,
+    marginBottom: 12,
+  },
+  googleLogoWrap: {
+    width: 22,
+    height: 22,
+    borderRadius: 4,
+    alignItems: "center",
+    justifyContent: "center",
   },
   googleG: {
-    fontSize: 16,
+    fontSize: 17,
     fontFamily: "DMSans_700Bold",
     color: "#EA4335",
+    lineHeight: 20,
   },
-  socialBtnText: {
+  oauthBtnText: {
     fontSize: 15,
-    fontFamily: "DMSans_500Medium",
+    fontFamily: "DMSans_600SemiBold",
+  },
+  appleNativeBtn: {
+    width: "100%",
+    height: 50,
+    marginBottom: 12,
   },
   dividerRow: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
+    marginTop: 4,
     marginBottom: 20,
   },
   dividerLine: {
@@ -326,7 +345,7 @@ const styles = StyleSheet.create({
     height: 1,
   },
   dividerText: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: "DMSans_400Regular",
   },
   fieldLabel: {

@@ -1,5 +1,6 @@
 import { useSSO, useSignUp } from "@clerk/expo";
 import { Feather } from "@expo/vector-icons";
+import * as AppleAuthentication from "expo-apple-authentication";
 import * as AuthSession from "expo-auth-session";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link, useRouter } from "expo-router";
@@ -167,29 +168,47 @@ export default function SignUpScreen() {
           Find your trail. Find your crew.
         </Text>
 
-        <View style={styles.socialRow}>
-          <Pressable
-            style={({ pressed }) => [styles.socialBtn, { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.75 : 1 }]}
-            onPress={handleGoogleSSO}
-          >
-            <Text style={styles.googleG}>G</Text>
-            <Text style={[styles.socialBtnText, { color: colors.foreground }]}>Google</Text>
-          </Pressable>
+        {/* Google */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.oauthBtn,
+            { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.75 : 1 },
+          ]}
+          onPress={handleGoogleSSO}
+        >
+          <Text style={styles.googleG}>G</Text>
+          <Text style={[styles.oauthBtnText, { color: colors.foreground }]}>Continue with Google</Text>
+        </Pressable>
 
-          {Platform.OS === "ios" && (
-            <Pressable
-              style={({ pressed }) => [styles.socialBtn, { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.75 : 1 }]}
-              onPress={handleAppleSSO}
-            >
-              <Feather name="apple" size={17} color={colors.foreground} />
-              <Text style={[styles.socialBtnText, { color: colors.foreground }]}>Apple</Text>
-            </Pressable>
-          )}
-        </View>
+        {/* Apple */}
+        {Platform.OS === "ios" ? (
+          <AppleAuthentication.AppleAuthenticationButton
+            buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP}
+            buttonStyle={
+              colors.background === "#ffffff" || colors.background === "#FFFFFF"
+                ? AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                : AppleAuthentication.AppleAuthenticationButtonStyle.WHITE
+            }
+            cornerRadius={12}
+            style={styles.appleNativeBtn}
+            onPress={handleAppleSSO}
+          />
+        ) : (
+          <Pressable
+            style={({ pressed }) => [
+              styles.oauthBtn,
+              { backgroundColor: colors.card, borderColor: colors.border, opacity: pressed ? 0.75 : 1 },
+            ]}
+            onPress={handleAppleSSO}
+          >
+            <Feather name="smartphone" size={18} color={colors.foreground} />
+            <Text style={[styles.oauthBtnText, { color: colors.foreground }]}>Continue with Apple</Text>
+          </Pressable>
+        )}
 
         <View style={styles.dividerRow}>
           <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
-          <Text style={[styles.dividerText, { color: colors.mutedForeground }]}>or</Text>
+          <Text style={[styles.dividerText, { color: colors.mutedForeground }]}>or sign up with email</Text>
           <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
         </View>
 
@@ -284,29 +303,29 @@ const styles = StyleSheet.create({
     fontFamily: "DMSans_400Regular",
     marginBottom: 28,
   },
-  socialRow: {
-    flexDirection: "row",
-    gap: 12,
-    marginBottom: 20,
-  },
-  socialBtn: {
-    flex: 1,
+  oauthBtn: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
-    paddingVertical: 13,
+    gap: 10,
+    paddingVertical: 14,
     borderRadius: 12,
     borderWidth: 1.5,
+    marginBottom: 12,
   },
   googleG: {
     fontSize: 16,
     fontFamily: "DMSans_700Bold",
     color: "#EA4335",
   },
-  socialBtnText: {
+  oauthBtnText: {
     fontSize: 15,
-    fontFamily: "DMSans_500Medium",
+    fontFamily: "DMSans_600SemiBold",
+  },
+  appleNativeBtn: {
+    width: "100%",
+    height: 50,
+    marginBottom: 12,
   },
   dividerRow: {
     flexDirection: "row",
