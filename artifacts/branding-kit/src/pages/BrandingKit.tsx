@@ -109,15 +109,12 @@ const ASSETS: Asset[] = [
     dimensions: "1584 × 396",
     w: 1584, h: 396,
     draw(ctx) {
-      // Gradient bg (left dark → right light)
-      const grad = ctx.createLinearGradient(0, 0, 1584, 396);
-      grad.addColorStop(0, GREEN_DARK);
-      grad.addColorStop(1, GREEN_LIGHT);
-      ctx.fillStyle = grad;
+      // White background
+      ctx.fillStyle = WHITE;
       ctx.fillRect(0, 0, 1584, 396);
 
-      // Subtle dot pattern overlay
-      ctx.fillStyle = "rgba(255,255,255,0.04)";
+      // Subtle dot pattern overlay in green
+      ctx.fillStyle = "rgba(26,158,79,0.06)";
       for (let x = 0; x < 1584; x += 48) {
         for (let y = 0; y < 396; y += 48) {
           ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
@@ -127,13 +124,13 @@ const ASSETS: Asset[] = [
       const tx = 476; // same start as when the logo + divider were present
 
       // Wordmark
-      ctx.fillStyle = WHITE;
+      ctx.fillStyle = GREEN;
       ctx.font = "bold 96px DM Sans, sans-serif";
       ctx.textAlign = "left";
       ctx.fillText("spoke", tx, 152);
 
       // Thin underline accent beneath wordmark
-      ctx.strokeStyle = "rgba(255,255,255,0.3)";
+      ctx.strokeStyle = "rgba(26,158,79,0.3)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(tx, 168);
@@ -141,7 +138,7 @@ const ASSETS: Asset[] = [
       ctx.stroke();
 
       // Tagline
-      ctx.fillStyle = "rgba(255,255,255,0.72)";
+      ctx.fillStyle = "rgba(26,158,79,0.72)";
       ctx.font = "34px DM Sans, sans-serif";
       ctx.fillText("Curated outdoor adventures for remote workers", tx, 220);
 
@@ -151,9 +148,9 @@ const ASSETS: Asset[] = [
       let px = tx;
       acts.forEach((a) => {
         const tw = ctx.measureText(a).width + 32;
-        ctx.fillStyle = "rgba(255,255,255,0.15)";
+        ctx.fillStyle = "rgba(26,158,79,0.12)";
         roundRect(ctx, px, 272, tw, 50, 25);
-        ctx.fillStyle = WHITE;
+        ctx.fillStyle = GREEN;
         ctx.textAlign = "center";
         ctx.fillText(a, px + tw / 2, 304);
         ctx.textAlign = "left";
