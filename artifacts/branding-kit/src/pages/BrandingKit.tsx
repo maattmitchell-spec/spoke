@@ -124,63 +124,63 @@ const ASSETS: Asset[] = [
         }
       }
 
-      // Shift offset — logo + text block moved right
-      const offset = 150;
+      // Section boundaries
+      const div1X = 570;
+      const div2X = 1200;
 
-      // Large logo — left side, vertically centered
-      const logoSize = 280;
-      const logoX = 80 + offset;
+      // Logo — horizontally centred in left zone, vertically centred
+      const logoSize = 210;
+      const logoX = (div1X - logoSize) / 2;
       const logoY = (396 - logoSize) / 2;
       ctx.drawImage(logoWhite, logoX, logoY, logoSize, logoSize);
 
-      // Vertical divider
-      const div1X = 420 + offset;
-      ctx.strokeStyle = "rgba(255,255,255,0.25)";
+      // Divider 1
+      ctx.strokeStyle = "rgba(255,255,255,0.22)";
       ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(div1X, 56);
-      ctx.lineTo(div1X, 340);
+      ctx.moveTo(div1X, 72);
+      ctx.lineTo(div1X, 324);
       ctx.stroke();
 
-      const div2X = 1220;
-
-      // Centre section: wordmark + tagline
-      const tx = div1X + 56;
-
+      // Centre section: wordmark + tagline (left-aligned, vertically centred)
+      const tx = div1X + 52;
       ctx.fillStyle = WHITE;
-      ctx.font = "bold 96px DM Sans, sans-serif";
+      ctx.font = "bold 78px DM Sans, sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("spoke", tx, 178);
+      ctx.fillText("spoke", tx, 182);
 
       ctx.fillStyle = "rgba(255,255,255,0.65)";
-      ctx.font = "32px DM Sans, sans-serif";
-      ctx.fillText("Curated outdoor adventures", tx, 236);
-      ctx.fillText("for remote workers", tx, 278);
+      ctx.font = "26px DM Sans, sans-serif";
+      ctx.fillText("Curated outdoor adventures", tx, 238);
+      ctx.fillText("for remote workers", tx, 272);
 
-      // Second divider before the activity column
-      ctx.strokeStyle = "rgba(255,255,255,0.2)";
+      // Divider 2
+      ctx.strokeStyle = "rgba(255,255,255,0.18)";
       ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.moveTo(div2X, 56);
-      ctx.lineTo(div2X, 340);
+      ctx.moveTo(div2X, 72);
+      ctx.lineTo(div2X, 324);
       ctx.stroke();
 
-      // Right column: activity types stacked vertically
+      // Right column: activity types stacked vertically, centred
       const acts: [string, string][] = [
         ["🚴", "Rides"],
         ["🏃", "Runs"],
         ["🏔", "Hikes"],
         ["☕", "Meetups"],
       ];
-      const rx = div2X + 48;
-      ctx.font = "bold 30px DM Sans, sans-serif";
+      const pillH = 44, pillGap = 56, pillW = 210;
+      const pillBlockH = (acts.length - 1) * pillGap + pillH;
+      const pillStartY = (396 - pillBlockH) / 2;
+      const rx = div2X + 52;
+      ctx.font = "bold 24px DM Sans, sans-serif";
       acts.forEach(([icon, label], i) => {
-        const y = 70 + i * 68;
+        const y = pillStartY + i * pillGap;
         ctx.fillStyle = "rgba(255,255,255,0.12)";
-        roundRect(ctx, rx, y, 260, 52, 10);
+        roundRect(ctx, rx, y, pillW, pillH, 10);
         ctx.fillStyle = WHITE;
         ctx.textAlign = "left";
-        ctx.fillText(`${icon}  ${label}`, rx + 16, y + 34);
+        ctx.fillText(`${icon}  ${label}`, rx + 16, y + pillH * 0.68);
       });
     },
   },
