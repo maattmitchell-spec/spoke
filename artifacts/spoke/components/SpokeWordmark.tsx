@@ -21,58 +21,37 @@ export function BikeWheelIcon({
   const colors = useColors();
   const c = color ?? colors.primary;
 
-  // All coordinates are in a 100×100 internal viewBox, scaled by `size`
-  // Hub circle (left, larger)
-  const hubCx = 28;
-  const hubCy = 50;
-  const hubR = 17;
-
-  // Top-right circle
-  const topCx = 74;
-  const topCy = 14;
-  const nodeR = 13;
-
-  // Bottom-right circle
-  const botCx = 74;
-  const botCy = 86;
-
-  const sw = 7.5; // stroke width
+  // 100×100 internal viewBox — hub-and-spoke network icon
+  // Hub
+  const hx = 50, hy = 50, hr = 11;
+  // Satellites: [cx, cy, r]
+  const nodes: [number, number, number][] = [
+    [20, 22, 7],   // top-left  (small)
+    [80, 20, 14],  // top-right (large)
+    [16, 50, 7],   // left      (small)
+    [18, 78, 14],  // bot-left  (large)
+    [82, 74, 7],   // bot-right (small)
+  ];
+  const sw = 4;
 
   return (
     <Svg width={size} height={size} viewBox="0 0 100 100">
-      {/* Connector lines drawn first so circles sit on top */}
-      <Line
-        x1={hubCx} y1={hubCy}
-        x2={topCx} y2={topCy}
-        stroke={c}
-        strokeWidth={sw}
-        strokeLinecap="round"
-      />
-      <Line
-        x1={hubCx} y1={hubCy}
-        x2={botCx} y2={botCy}
-        stroke={c}
-        strokeWidth={sw}
-        strokeLinecap="round"
-      />
+      {/* Spokes — drawn first so circles sit on top */}
+      {nodes.map(([cx, cy], i) => (
+        <Line
+          key={i}
+          x1={hx} y1={hy} x2={cx} y2={cy}
+          stroke={c} strokeWidth={sw} strokeLinecap="round"
+        />
+      ))}
 
-      {/* Hub circle */}
-      <Circle
-        cx={hubCx} cy={hubCy} r={hubR}
-        stroke={c} strokeWidth={sw} fill="none"
-      />
+      {/* Hub */}
+      <Circle cx={hx} cy={hy} r={hr} stroke={c} strokeWidth={sw} fill="none" />
 
-      {/* Top circle */}
-      <Circle
-        cx={topCx} cy={topCy} r={nodeR}
-        stroke={c} strokeWidth={sw} fill="none"
-      />
-
-      {/* Bottom circle */}
-      <Circle
-        cx={botCx} cy={botCy} r={nodeR}
-        stroke={c} strokeWidth={sw} fill="none"
-      />
+      {/* Satellite nodes */}
+      {nodes.map(([cx, cy, r], i) => (
+        <Circle key={i} cx={cx} cy={cy} r={r} stroke={c} strokeWidth={sw} fill="none" />
+      ))}
     </Svg>
   );
 }
