@@ -427,18 +427,18 @@ const ASSETS: Asset[] = [
     },
   },
 
-  // ── App Store (1290 × 2796 · iPhone 6.7") ─────────────────────────────────
+  // ── App Store (1284 × 2778 · iPhone 6.5") ─────────────────────────────────
   // ── App Previews ───────────────────────────────────────────────────────────
   {
     id: "store-preview-1",
     label: "App Preview 1 — Hero",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      const g = ctx.createLinearGradient(0, 0, 0, 2796);
+      const g = ctx.createLinearGradient(0, 0, 0, 2778);
       g.addColorStop(0, "#071a0d"); g.addColorStop(0.45, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 2778);
       // Decorative arcs
       ctx.strokeStyle = "rgba(255,255,255,0.04)"; ctx.lineWidth = 180;
       ctx.beginPath(); ctx.arc(1500, 200, 1100, 0, Math.PI * 2); ctx.stroke();
@@ -477,14 +477,14 @@ const ASSETS: Asset[] = [
     id: "store-preview-2",
     label: "App Preview 2 — Activities",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       // Green top band
       const g = ctx.createLinearGradient(0, 0, 0, 860);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 860);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 860);
       // Logo + wordmark
       ctx.drawImage(logoWhite, 80, 72, 160, 160);
       ctx.fillStyle = WHITE; ctx.font = "bold 88px DM Sans, sans-serif";
@@ -521,10 +521,10 @@ const ASSETS: Asset[] = [
     id: "store-preview-3",
     label: "App Preview 3 — Community",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = "#0A1F12"; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = "#0A1F12"; ctx.fillRect(0, 0, 1284, 2778);
       // Concentric arcs
       for (let i = 1; i <= 5; i++) {
         ctx.strokeStyle = `rgba(46,189,106,${0.03 + i * 0.015})`; ctx.lineWidth = 70;
@@ -570,13 +570,13 @@ const ASSETS: Asset[] = [
     id: "store-screen-1",
     label: "Screenshot 1 — Explore",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Discover", 645, 196); ctx.fillText("adventures", 645, 332); ctx.fillText("near you", 645, 468);
@@ -624,13 +624,13 @@ const ASSETS: Asset[] = [
     id: "store-screen-2",
     label: "Screenshot 2 — Event Detail",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Every detail", 645, 220); ctx.fillText("in one view", 645, 360);
@@ -689,13 +689,13 @@ const ASSETS: Asset[] = [
     id: "store-screen-3",
     label: "Screenshot 3 — Schedule",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Never miss", 645, 220); ctx.fillText("an adventure", 645, 360);
@@ -734,13 +734,13 @@ const ASSETS: Asset[] = [
     id: "store-screen-4",
     label: "Screenshot 4 — Community",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Meet your", 645, 220); ctx.fillText("outdoor crew", 645, 360);
@@ -775,14 +775,14 @@ const ASSETS: Asset[] = [
     id: "store-screen-5",
     label: "Screenshot 5 — Profile",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       // Green hero bg
       const g = ctx.createLinearGradient(0, 0, 0, 900);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 900);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 900);
       // Headline above profile
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
@@ -843,13 +843,13 @@ const ASSETS: Asset[] = [
     id: "store-screen-6",
     label: "Screenshot 6 — Sign Up",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, logoGreen, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Get started", 645, 220); ctx.fillText("in seconds", 645, 360);
@@ -892,13 +892,13 @@ const ASSETS: Asset[] = [
     id: "store-screen-7",
     label: "Screenshot 7 — Create Event",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Lead your next", 645, 220); ctx.fillText("adventure", 645, 360);
@@ -945,13 +945,13 @@ const ASSETS: Asset[] = [
     id: "store-screen-8",
     label: "Screenshot 8 — Filters & Search",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Find your", 645, 220); ctx.fillText("perfect adventure", 645, 360);
@@ -1019,13 +1019,13 @@ const ASSETS: Asset[] = [
     id: "store-screen-9",
     label: "Screenshot 9 — Event Chat",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = OFF_WHITE; ctx.fillRect(0, 0, 1284, 2778);
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, GREEN_DARK); g.addColorStop(1, GREEN);
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Stay in the loop", 645, 220); ctx.fillText("with your crew", 645, 360);
@@ -1082,14 +1082,14 @@ const ASSETS: Asset[] = [
     id: "store-screen-10",
     label: "Screenshot 10 — Dark Mode",
     platform: "App Store",
-    dimensions: "1290 × 2796",
-    w: 1290, h: 2796,
+    dimensions: "1284 × 2778",
+    w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = "#090E0B"; ctx.fillRect(0, 0, 1290, 2796);
+      ctx.fillStyle = "#090E0B"; ctx.fillRect(0, 0, 1284, 2778);
       // Dark green header band
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, "#050F08"); g.addColorStop(1, "#0A1F12");
-      ctx.fillStyle = g; ctx.fillRect(0, 0, 1290, 680);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
       ctx.fillText("Looks great", 645, 220); ctx.fillText("day or night", 645, 360);
