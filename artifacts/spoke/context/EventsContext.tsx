@@ -13,6 +13,7 @@ interface EventsContextType {
   events: Event[];
   toggleJoin: (eventId: string) => void;
   joinedCount: number;
+  joinedEvents: Event[];
 }
 
 const EventsContext = createContext<EventsContextType | null>(null);
@@ -51,9 +52,10 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const joinedCount = events.filter((e) => e.isJoined).length;
+  const joinedEvents = events.filter((e) => e.isJoined);
 
   return (
-    <EventsContext.Provider value={{ events, toggleJoin, joinedCount }}>
+    <EventsContext.Provider value={{ events, toggleJoin, joinedCount, joinedEvents }}>
       {children}
     </EventsContext.Provider>
   );

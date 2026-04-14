@@ -2,6 +2,7 @@ import { Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import * as ImagePicker from "expo-image-picker";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Alert,
@@ -17,9 +18,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BikeWheelIcon } from "@/components/SpokeWordmark";
 import { useColors } from "@/hooks/useColors";
-import { useTheme } from "@/context/ThemeContext";
 import { useEvents } from "@/context/EventsContext";
 import { useUser } from "@/context/UserContext";
+import type { Event, EventType } from "@/constants/data";
 
 const STATS = [
   { label: "Rides", value: "12" },
@@ -27,20 +28,11 @@ const STATS = [
   { label: "Elevation", value: "34k ft" },
 ];
 
-const SETTINGS_ITEMS = [
-  { icon: "bell", label: "Notifications" },
-  { icon: "map", label: "Saved Routes" },
-  { icon: "users", label: "Invite Friends" },
-  { icon: "shield", label: "Privacy" },
-  { icon: "info", label: "About Spoke" },
-];
-
-type ThemeOption = "light" | "dark" | "system";
-const THEME_OPTIONS: ThemeOption[] = ["light", "dark", "system"];
-const THEME_ICONS: Record<ThemeOption, string> = {
-  light: "sun",
-  dark: "moon",
-  system: "monitor",
+const TYPE_META: Record<EventType, { icon: string; label: string; color: string }> = {
+  ride: { icon: "wind", label: "RIDE", color: "#1A9E4F" },
+  run: { icon: "activity", label: "RUN", color: "#0284C7" },
+  hike: { icon: "triangle", label: "HIKE", color: "#D97706" },
+  meetup: { icon: "users", label: "MEETUP", color: "#7C3AED" },
 };
 
 function getInitials(name: string) {
@@ -56,10 +48,12 @@ function getInitials(name: string) {
 export default function ProfileScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
-  const { joinedCount } = useEvents();
-  const { preference, setPreference } = useTheme();
+  const router = useRouter();
+  const { joinedCount, joinedEvents } = useEvents();
   const { profile, requireAccount, updateAvatar, updateHeader, updateBio } = useUser();
   const isWeb = Platform.OS === "web";
+
+  const recentActivity = joinedEvents.slice(-4).reverse();
 
   const handlePickAvatar = useCallback(() => {
     if (!profile) {
@@ -211,7 +205,10 @@ export default function ProfileScreen() {
                 {profile?.headerUri ? "Change cover" : "Add cover"}
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => router.push("/settings")}
+            >
               <Feather name="settings" size={20} color="#fff" />
             </TouchableOpacity>
           </View>
@@ -412,106 +409,112 @@ export default function ProfileScreen() {
       </View>
 
       <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
-          Settings
-        </Text>
-        <View
-          style={[
-            styles.settingsCard,
-            {
-              backgroundColor: colors.card,
-              borderColor: colors.border,
-              borderRadius: colors.radius,
-            },
-          ]}
-        >
+        <View style={styles.activityHeader}>
+          <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
+            Recent Activity
+          </Text>
+          {recentActivity.length > 0 && (
+            <TouchableOpacity activeOpacity={0.7}>
+              <Text style={[styles.seeAll, { color: colors.primary }]}>See all</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+
+        {recentActivity.length === 0 ? (
           <View
             style={[
-              styles.settingsRow,
+              styles.emptyActivity,
               {
-                borderBottomWidth: StyleSheet.hairlineWidth,
-                borderBottomColor: colors.border,
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+                borderRadius: colors.radius,
               },
             ]}
           >
-            <View style={styles.settingsLeft}>
-              <Feather
-                name={THEME_ICONS[preference] as any}
-                size={17}
-                color={colors.foreground}
-              />
-              <Text style={[styles.settingsLabel, { color: colors.foreground }]}>
-                Appearance
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.themeToggle,
-                { backgroundColor: colors.secondary, borderRadius: colors.radius },
-              ]}
-            >
-              {THEME_OPTIONS.map((opt) => (
-                <TouchableOpacity
-                  key={opt}
-                  activeOpacity={0.7}
-                  onPress={() => setPreference(opt)}
+            <Feather name="calendar" size={28} color={colors.mutedForeground} style={{ marginBottom: 8 }} />
+            <Text style={[styles.emptyTitle, { color: colors.foreground }]}>
+              No activity yet
+            </Text>
+            <Text style={[styles.emptySubtitle, { color: colors.mutedForeground }]}>
+              Events you join will appear here.
+            </Text>
+          </View>
+        ) : (
+          <View
+            style={[
+              styles.activityList,
+              {
+                backgroundColor: colors.card,
+                borderColor: colors.border,
+                borderRadius: colors.radius,
+              },
+            ]}
+          >
+            {recentActivity.map((event, index) => {
+              const meta = TYPE_META[event.type];
+              const isLast = index === recentActivity.length - 1;
+              return (
+                <View
+                  key={event.id}
                   style={[
-                    styles.themeOption,
-                    preference === opt && {
-                      backgroundColor: colors.primary,
-                      borderRadius: colors.radius - 2,
-                    },
+                    styles.activityCard,
+                    !isLast && { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.border },
                   ]}
                 >
-                  <Feather
-                    name={THEME_ICONS[opt] as any}
-                    size={14}
-                    color={
-                      preference === opt
-                        ? colors.primaryForeground
-                        : colors.mutedForeground
-                    }
-                  />
-                  <Text
-                    style={[
-                      styles.themeOptionText,
-                      {
-                        color:
-                          preference === opt
-                            ? colors.primaryForeground
-                            : colors.mutedForeground,
-                      },
-                    ]}
-                  >
-                    {opt.charAt(0).toUpperCase() + opt.slice(1)}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                  <View style={styles.activityCardInner}>
+                    <View
+                      style={[
+                        styles.activityIconBox,
+                        { backgroundColor: meta.color + "18" },
+                      ]}
+                    >
+                      <Feather
+                        name={meta.icon as any}
+                        size={16}
+                        color={meta.color}
+                      />
+                    </View>
+                    <View style={styles.activityInfo}>
+                      <View style={styles.activityTopRow}>
+                        <Text
+                          style={[
+                            styles.activityTypePill,
+                            { color: meta.color },
+                          ]}
+                        >
+                          {meta.label}
+                        </Text>
+                      </View>
+                      <Text
+                        style={[styles.activityTitle, { color: colors.foreground }]}
+                        numberOfLines={1}
+                      >
+                        {event.title}
+                      </Text>
+                      <Text
+                        style={[styles.activityMeta, { color: colors.mutedForeground }]}
+                        numberOfLines={1}
+                      >
+                        {event.date} · {event.time} · {event.location}
+                      </Text>
+                    </View>
+                    <View
+                      style={[
+                        styles.goingPill,
+                        { backgroundColor: colors.secondary },
+                      ]}
+                    >
+                      <Feather name="check" size={11} color={colors.primary} />
+                      <Text style={[styles.goingText, { color: colors.primary }]}>
+                        Going
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              );
+            })}
           </View>
-
-          {SETTINGS_ITEMS.map((item, index) => (
-            <TouchableOpacity
-              key={item.label}
-              activeOpacity={0.7}
-              style={[
-                styles.settingsRow,
-                index < SETTINGS_ITEMS.length - 1 && {
-                  borderBottomWidth: StyleSheet.hairlineWidth,
-                  borderBottomColor: colors.border,
-                },
-              ]}
-            >
-              <View style={styles.settingsLeft}>
-                <Feather name={item.icon as any} size={17} color={colors.foreground} />
-                <Text style={[styles.settingsLabel, { color: colors.foreground }]}>
-                  {item.label}
-                </Text>
-              </View>
-              <Feather name="chevron-right" size={16} color={colors.mutedForeground} />
-            </TouchableOpacity>
-          ))}
-        </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -701,39 +704,86 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: "DMSans_500Medium",
   },
-  settingsCard: {
-    borderWidth: 1,
-    overflow: "hidden",
-  },
-  settingsRow: {
+  activityHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 14,
+    marginBottom: 10,
   },
-  settingsLeft: {
+  seeAll: {
+    fontSize: 13,
+    fontFamily: "DMSans_500Medium",
+  },
+  emptyActivity: {
+    borderWidth: 1,
+    padding: 32,
+    alignItems: "center",
+  },
+  emptyTitle: {
+    fontSize: 15,
+    fontFamily: "DMSans_600SemiBold",
+    marginBottom: 4,
+  },
+  emptySubtitle: {
+    fontSize: 13,
+    fontFamily: "DMSans_400Regular",
+    textAlign: "center",
+  },
+  activityList: {
+    borderWidth: 1,
+    overflow: "hidden",
+  },
+  activityCard: {},
+  activityCardBorder: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  activityCardInner: {
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 13,
   },
-  settingsLabel: {
-    fontSize: 15,
+  activityIconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+  },
+  activityInfo: {
+    flex: 1,
+    gap: 1,
+  },
+  activityTopRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  activityTypePill: {
+    fontSize: 10,
+    fontFamily: "DMSans_600SemiBold",
+    letterSpacing: 0.6,
+  },
+  activityTitle: {
+    fontSize: 14,
+    fontFamily: "DMSans_600SemiBold",
+    letterSpacing: -0.2,
+  },
+  activityMeta: {
+    fontSize: 12,
     fontFamily: "DMSans_400Regular",
   },
-  themeToggle: {
-    flexDirection: "row",
-    padding: 3,
-    gap: 2,
-  },
-  themeOption: {
+  goingPill: {
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    paddingHorizontal: 10,
+    paddingHorizontal: 9,
     paddingVertical: 5,
+    borderRadius: 20,
+    flexShrink: 0,
   },
-  themeOptionText: {
+  goingText: {
     fontSize: 12,
     fontFamily: "DMSans_500Medium",
   },
