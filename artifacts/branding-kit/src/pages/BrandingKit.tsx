@@ -108,7 +108,7 @@ const ASSETS: Asset[] = [
     platform: "LinkedIn",
     dimensions: "1584 × 396",
     w: 1584, h: 396,
-    draw(ctx, _, logoWhite) {
+    draw(ctx) {
       // Gradient bg (left dark → right light)
       const grad = ctx.createLinearGradient(0, 0, 1584, 396);
       grad.addColorStop(0, GREEN_DARK);
@@ -124,46 +124,38 @@ const ASSETS: Asset[] = [
         }
       }
 
-      // Large logo — left side, vertically centered
-      const logoSize = 280;
-      const logoX = 80;
-      const logoY = (396 - logoSize) / 2;
-      ctx.drawImage(logoWhite, logoX, logoY, logoSize, logoSize);
-
-      // Vertical divider
-      const divX = 420;
-      ctx.strokeStyle = "rgba(255,255,255,0.25)";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(divX, 56);
-      ctx.lineTo(divX, 340);
-      ctx.stroke();
-
-      // ── All text on the right ──────────────────────────────────────────────
-      const tx = divX + 56;
+      const mx = 80; // left margin
 
       // Wordmark
       ctx.fillStyle = WHITE;
-      ctx.font = "bold 96px DM Sans, sans-serif";
+      ctx.font = "bold 108px DM Sans, sans-serif";
       ctx.textAlign = "left";
-      ctx.fillText("spoke", tx, 152);
+      ctx.fillText("spoke", mx, 162);
+
+      // Thin underline accent beneath wordmark
+      ctx.strokeStyle = "rgba(255,255,255,0.3)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(mx, 178);
+      ctx.lineTo(mx + 340, 178);
+      ctx.stroke();
 
       // Tagline
       ctx.fillStyle = "rgba(255,255,255,0.72)";
-      ctx.font = "34px DM Sans, sans-serif";
-      ctx.fillText("Curated outdoor adventures for remote workers", tx, 210);
+      ctx.font = "36px DM Sans, sans-serif";
+      ctx.fillText("Curated outdoor adventures for remote workers", mx, 232);
 
       // Activity type pills in a row
       const acts = ["🚴 Rides", "🏃 Runs", "🏔 Hikes", "☕ Meetups"];
-      ctx.font = "bold 26px DM Sans, sans-serif";
-      let px = tx;
+      ctx.font = "bold 27px DM Sans, sans-serif";
+      let px = mx;
       acts.forEach((a) => {
-        const tw = ctx.measureText(a).width + 32;
+        const tw = ctx.measureText(a).width + 36;
         ctx.fillStyle = "rgba(255,255,255,0.15)";
-        roundRect(ctx, px, 268, tw, 50, 25);
+        roundRect(ctx, px, 284, tw, 52, 26);
         ctx.fillStyle = WHITE;
         ctx.textAlign = "center";
-        ctx.fillText(a, px + tw / 2, 300);
+        ctx.fillText(a, px + tw / 2, 318);
         ctx.textAlign = "left";
         px += tw + 14;
       });
