@@ -7,23 +7,40 @@ const WHITE = "#FFFFFF";
 const OFF_WHITE = "#F5FAF7";
 const DARK = "#1A1E0F";
 
-// Build the hub-and-spoke SVG string in a given color
+// Build the gear-hub-and-spoke SVG string in a given color
+// Filled 8-tooth gear (hollow center) + 8 spokes + terminal circles — matches the app icon
 function hubSpokeSvg(color: string, size = 100) {
-  const hx = 50, hy = 50, hubR = 13, nodeR = 8, spokeLen = 34, sw = 6;
-  const satellites = Array.from({ length: 6 }, (_, i) => {
-    const rad = (i * 60 * Math.PI) / 180;
-    return { cx: hx + spokeLen * Math.cos(rad), cy: hy - spokeLen * Math.sin(rad) };
-  });
-  const lines = satellites
-    .map(
-      (s) =>
-        `<line x1="${hx}" y1="${hy}" x2="${s.cx.toFixed(2)}" y2="${s.cy.toFixed(2)}" stroke="${color}" stroke-width="${sw}" stroke-linecap="round"/>`
-    )
+  const spokes = [
+    [50, 50, 90, 50], [50, 50, 78.28, 21.72], [50, 50, 50, 10],
+    [50, 50, 21.72, 21.72], [50, 50, 10, 50], [50, 50, 21.72, 78.28],
+    [50, 50, 50, 90], [50, 50, 78.28, 78.28],
+  ];
+  const terms = [
+    [90, 50], [78.28, 21.72], [50, 10], [21.72, 21.72],
+    [10, 50], [21.72, 78.28], [50, 90], [78.28, 78.28],
+  ];
+  const gearPath =
+    "M 73.00 50.00 L 64.78 43.88 L 66.26 33.74 L 56.12 35.22 L 50.00 27.00 " +
+    "L 43.88 35.22 L 33.74 33.74 L 35.22 43.88 L 27.00 50.00 L 35.22 56.12 " +
+    "L 33.74 66.26 L 43.88 64.78 L 50.00 73.00 L 56.12 64.78 L 66.26 66.26 " +
+    "L 64.78 56.12 Z M 60 50 A 10 10 0 1 0 40 50 A 10 10 0 1 0 60 50 Z";
+
+  const spokeEls = spokes
+    .map(([x1, y1, x2, y2]) =>
+      `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="3" stroke-linecap="round"/>`)
     .join("");
-  const circles = satellites
-    .map((s) => `<circle cx="${s.cx.toFixed(2)}" cy="${s.cy.toFixed(2)}" r="${nodeR}" fill="${color}"/>`)
+  const termEls = terms
+    .map(([cx, cy]) =>
+      `<circle cx="${cx}" cy="${cy}" r="5" stroke="${color}" stroke-width="3" fill="none"/>`)
     .join("");
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 100 100">${lines}<circle cx="${hx}" cy="${hy}" r="${hubR}" fill="${color}"/>${circles}</svg>`;
+
+  return (
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 100 100">` +
+    spokeEls +
+    `<path d="${gearPath}" fill="${color}" fill-rule="evenodd"/>` +
+    termEls +
+    `</svg>`
+  );
 }
 
 function svgToImage(svgStr: string): Promise<HTMLImageElement> {
@@ -193,7 +210,7 @@ const ASSETS: Asset[] = [
     draw(ctx, _, logoWhite) {
       // Deep dark green bg with a lighter right fade
       const grad = ctx.createLinearGradient(0, 0, 1584, 0);
-      grad.addColorStop(0, "#071810");
+      grad.addColorStop(0, "#080C05");
       grad.addColorStop(0.55, GREEN_DARK);
       grad.addColorStop(1, GREEN);
       ctx.fillStyle = grad;
@@ -1085,7 +1102,7 @@ const ASSETS: Asset[] = [
     dimensions: "1284 × 2778",
     w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = "#090E0B"; ctx.fillRect(0, 0, 1284, 2778);
+      ctx.fillStyle = "#0D0F08"; ctx.fillRect(0, 0, 1284, 2778);
       // Dark green header band
       const g = ctx.createLinearGradient(0, 0, 0, 680);
       g.addColorStop(0, "#080C05"); g.addColorStop(1, "#1A1E0F");
@@ -1096,14 +1113,14 @@ const ASSETS: Asset[] = [
       ctx.fillStyle = "rgba(255,255,255,0.5)"; ctx.font = "58px DM Sans, sans-serif";
       ctx.fillText("Full dark mode, beautifully designed", 645, 480);
       // Dark search bar
-      ctx.fillStyle = "#111A14"; roundRect(ctx, 80, 730, 1130, 108, 54); ctx.fill();
-      ctx.fillStyle = "#7A9484"; ctx.font = "50px DM Sans, sans-serif"; ctx.textAlign = "left";
+      ctx.fillStyle = "#141810"; roundRect(ctx, 80, 730, 1130, 108, 54); ctx.fill();
+      ctx.fillStyle = "#7A8560"; ctx.font = "50px DM Sans, sans-serif"; ctx.textAlign = "left";
       ctx.fillText("🔍  Search by location or name...", 140, 800);
       // Dark filter pills
       const dfilt = ["All", "Rides", "Runs", "Hikes", "Meetups"];
       let dfx = 80;
       dfilt.forEach((f, i) => {
-        const dfw = f.length * 36 + 64; ctx.fillStyle = i === 0 ? GREEN_LIGHT : "#111A14";
+        const dfw = f.length * 36 + 64; ctx.fillStyle = i === 0 ? GREEN_LIGHT : "#141810";
         roundRect(ctx, dfx, 890, dfw, 82, 41); ctx.fill();
         ctx.fillStyle = i === 0 ? "#1A1E0F" : "#E8EEDA"; ctx.font = "bold 42px DM Sans, sans-serif";
         ctx.textAlign = "center"; ctx.fillText(f, dfx + dfw / 2, 943); dfx += dfw + 18;
@@ -1116,16 +1133,16 @@ const ASSETS: Asset[] = [
       ];
       devs.forEach((e, i) => {
         const cy = 1020 + i * 560;
-        ctx.fillStyle = "#111A14"; roundRect(ctx, 80, cy, 1130, 520, 28); ctx.fill();
+        ctx.fillStyle = "#141810"; roundRect(ctx, 80, cy, 1130, 520, 28); ctx.fill();
         const ig = ctx.createLinearGradient(0, cy, 0, cy + 240);
-        ig.addColorStop(0, e.col + "44"); ig.addColorStop(1, "#111A14");
+        ig.addColorStop(0, e.col + "44"); ig.addColorStop(1, "#141810");
         ctx.fillStyle = ig; roundRect(ctx, 80, cy, 1130, 240, 28); ctx.fill();
         ctx.fillStyle = e.col; roundRect(ctx, 114, cy + 186, 148, 50, 8); ctx.fill();
-        ctx.fillStyle = "#090E0B"; ctx.font = "bold 32px DM Sans, sans-serif"; ctx.textAlign = "left";
+        ctx.fillStyle = "#0D0F08"; ctx.font = "bold 32px DM Sans, sans-serif"; ctx.textAlign = "left";
         ctx.fillText(e.type, 134, cy + 222);
         ctx.fillStyle = "#E8EEDA"; ctx.font = "bold 62px DM Sans, sans-serif"; ctx.fillText(e.title, 114, cy + 316);
-        ctx.fillStyle = "#7A9484"; ctx.font = "44px DM Sans, sans-serif"; ctx.fillText("📍 " + e.loc, 114, cy + 376);
-        ctx.fillStyle = "#0D2016"; roundRect(ctx, 114, cy + 420, 180, 66, 10); ctx.fill();
+        ctx.fillStyle = "#7A8560"; ctx.font = "44px DM Sans, sans-serif"; ctx.fillText("📍 " + e.loc, 114, cy + 376);
+        ctx.fillStyle = "#1A1F0D"; roundRect(ctx, 114, cy + 420, 180, 66, 10); ctx.fill();
         ctx.fillStyle = "#E8EEDA"; ctx.font = "bold 40px DM Sans, sans-serif"; ctx.textAlign = "center"; ctx.fillText(e.dist, 204, cy + 462);
         ctx.fillStyle = GREEN_LIGHT; roundRect(ctx, 900, cy + 420, 240, 66, 33); ctx.fill();
         ctx.fillStyle = "#1A1E0F"; ctx.font = "bold 44px DM Sans, sans-serif"; ctx.fillText("Join", 1020, cy + 462);
