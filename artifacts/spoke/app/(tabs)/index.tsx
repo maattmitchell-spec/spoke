@@ -50,7 +50,7 @@ const YEAR = 2026;
 const DAY_LABELS = ["S","M","T","W","T","F","S"];
 
 const TYPE_DOT_COLOR: Record<EventType, string> = {
-  ride: "#1A9E4F",
+  ride: "#556B2F",
   run: "#3B82F6",
   hike: "#E07B39",
   meetup: "#8B5CF6",

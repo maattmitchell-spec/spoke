@@ -23,7 +23,7 @@ import type { EventType } from "@/constants/data";
 type Difficulty = "easy" | "moderate" | "hard";
 
 const EVENT_TYPES: { key: EventType; label: string; icon: string; color: string }[] = [
-  { key: "ride", label: "Ride", icon: "activity", color: "#1A9E4F" },
+  { key: "ride", label: "Ride", icon: "activity", color: "#556B2F" },
   { key: "run", label: "Run", icon: "zap", color: "#E07B3A" },
   { key: "hike", label: "Hike", icon: "triangle", color: "#7C5CBF" },
   { key: "meetup", label: "Meetup", icon: "users", color: "#2B7FC8" },
@@ -273,7 +273,7 @@ export default function CreateEventScreen() {
           {DIFFICULTIES.map((d) => {
             const active = difficulty === d.key;
             const diffColor =
-              d.key === "easy" ? "#1A9E4F" : d.key === "moderate" ? "#E07B3A" : "#C0392B";
+              d.key === "easy" ? "#556B2F" : d.key === "moderate" ? "#E07B3A" : "#C0392B";
             return (
               <TouchableOpacity
                 key={d.key}

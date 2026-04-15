@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-const GREEN = "#1A9E4F";
-const GREEN_DARK = "#0F6832";
-const GREEN_LIGHT = "#2EBD6A";
+const GREEN = "#556B2F";
+const GREEN_DARK = "#3A4A1E";
+const GREEN_LIGHT = "#7A9B30";
 const WHITE = "#FFFFFF";
 const OFF_WHITE = "#F5FAF7";
-const DARK = "#0A1F12";
+const DARK = "#1A1E0F";
 
 // Build the hub-and-spoke SVG string in a given color
 function hubSpokeSvg(color: string, size = 100) {
@@ -524,7 +524,7 @@ const ASSETS: Asset[] = [
     dimensions: "1284 × 2778",
     w: 1284, h: 2778,
     draw(ctx, _g, logoWhite) {
-      ctx.fillStyle = "#0A1F12"; ctx.fillRect(0, 0, 1284, 2778);
+      ctx.fillStyle = "#1A1E0F"; ctx.fillRect(0, 0, 1284, 2778);
       // Concentric arcs
       for (let i = 1; i <= 5; i++) {
         ctx.strokeStyle = `rgba(46,189,106,${0.03 + i * 0.015})`; ctx.lineWidth = 70;
@@ -1088,7 +1088,7 @@ const ASSETS: Asset[] = [
       ctx.fillStyle = "#090E0B"; ctx.fillRect(0, 0, 1284, 2778);
       // Dark green header band
       const g = ctx.createLinearGradient(0, 0, 0, 680);
-      g.addColorStop(0, "#050F08"); g.addColorStop(1, "#0A1F12");
+      g.addColorStop(0, "#080C05"); g.addColorStop(1, "#1A1E0F");
       ctx.fillStyle = g; ctx.fillRect(0, 0, 1284, 680);
       ctx.textAlign = "center"; ctx.fillStyle = WHITE;
       ctx.font = "bold 118px DM Sans, sans-serif";
@@ -1105,7 +1105,7 @@ const ASSETS: Asset[] = [
       dfilt.forEach((f, i) => {
         const dfw = f.length * 36 + 64; ctx.fillStyle = i === 0 ? GREEN_LIGHT : "#111A14";
         roundRect(ctx, dfx, 890, dfw, 82, 41); ctx.fill();
-        ctx.fillStyle = i === 0 ? "#0A1F12" : "#EDF5F0"; ctx.font = "bold 42px DM Sans, sans-serif";
+        ctx.fillStyle = i === 0 ? "#1A1E0F" : "#E8EEDA"; ctx.font = "bold 42px DM Sans, sans-serif";
         ctx.textAlign = "center"; ctx.fillText(f, dfx + dfw / 2, 943); dfx += dfw + 18;
       });
       // Dark event cards
@@ -1123,12 +1123,12 @@ const ASSETS: Asset[] = [
         ctx.fillStyle = e.col; roundRect(ctx, 114, cy + 186, 148, 50, 8); ctx.fill();
         ctx.fillStyle = "#090E0B"; ctx.font = "bold 32px DM Sans, sans-serif"; ctx.textAlign = "left";
         ctx.fillText(e.type, 134, cy + 222);
-        ctx.fillStyle = "#EDF5F0"; ctx.font = "bold 62px DM Sans, sans-serif"; ctx.fillText(e.title, 114, cy + 316);
+        ctx.fillStyle = "#E8EEDA"; ctx.font = "bold 62px DM Sans, sans-serif"; ctx.fillText(e.title, 114, cy + 316);
         ctx.fillStyle = "#7A9484"; ctx.font = "44px DM Sans, sans-serif"; ctx.fillText("📍 " + e.loc, 114, cy + 376);
         ctx.fillStyle = "#0D2016"; roundRect(ctx, 114, cy + 420, 180, 66, 10); ctx.fill();
-        ctx.fillStyle = "#EDF5F0"; ctx.font = "bold 40px DM Sans, sans-serif"; ctx.textAlign = "center"; ctx.fillText(e.dist, 204, cy + 462);
+        ctx.fillStyle = "#E8EEDA"; ctx.font = "bold 40px DM Sans, sans-serif"; ctx.textAlign = "center"; ctx.fillText(e.dist, 204, cy + 462);
         ctx.fillStyle = GREEN_LIGHT; roundRect(ctx, 900, cy + 420, 240, 66, 33); ctx.fill();
-        ctx.fillStyle = "#0A1F12"; ctx.font = "bold 44px DM Sans, sans-serif"; ctx.fillText("Join", 1020, cy + 462);
+        ctx.fillStyle = "#1A1E0F"; ctx.font = "bold 44px DM Sans, sans-serif"; ctx.fillText("Join", 1020, cy + 462);
       });
     },
   },
@@ -1238,7 +1238,7 @@ export default function BrandingKit() {
         fontFamily: "'DM Sans', sans-serif",
         background: "#F5F8F6",
         minHeight: "100vh",
-        color: "#0A1F12",
+        color: "#1A1E0F",
       }}
     >
       {/* Header */}
@@ -1312,11 +1312,11 @@ export default function BrandingKit() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: 13, color: "#6B8F77", fontWeight: 500 }}>Colors</span>
           {[
-            { c: GREEN, label: "#1A9E4F" },
-            { c: GREEN_DARK, label: "#0F6832" },
-            { c: GREEN_LIGHT, label: "#2EBD6A" },
+            { c: GREEN, label: "#556B2F" },
+            { c: GREEN_DARK, label: "#3A4A1E" },
+            { c: GREEN_LIGHT, label: "#7A9B30" },
             { c: WHITE, label: "#FFFFFF", border: true },
-            { c: DARK, label: "#0A1F12" },
+            { c: DARK, label: "#1A1E0F" },
           ].map((sw) => (
             <div key={sw.c} style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <div
@@ -1336,7 +1336,7 @@ export default function BrandingKit() {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 13, color: "#6B8F77", fontWeight: 500 }}>Font</span>
-          <span style={{ fontSize: 14, color: "#0A1F12", fontWeight: 600 }}>DM Sans</span>
+          <span style={{ fontSize: 14, color: "#1A1E0F", fontWeight: 600 }}>DM Sans</span>
         </div>
       </div>
 
@@ -1350,7 +1350,7 @@ export default function BrandingKit() {
                 style={{
                   fontSize: 20,
                   fontWeight: 700,
-                  color: "#0A1F12",
+                  color: "#1A1E0F",
                   marginBottom: 24,
                   display: "flex",
                   alignItems: "center",
@@ -1442,7 +1442,7 @@ export default function BrandingKit() {
                         }}
                       >
                         <div>
-                          <div style={{ fontSize: 14, fontWeight: 600, color: "#0A1F12" }}>
+                          <div style={{ fontSize: 14, fontWeight: 600, color: "#1A1E0F" }}>
                             {asset.label}
                           </div>
                           <div style={{ fontSize: 12, color: "#6B8F77", marginTop: 2 }}>

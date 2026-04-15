@@ -1,7 +1,7 @@
-const GREEN = "#1A9E4F";
-const GREEN_DARK = "#0F6832";
-const GREEN_LIGHT = "#2EBD6A";
-const DARK = "#0A1F12";
+const GREEN = "#556B2F";
+const GREEN_DARK = "#3A4A1E";
+const GREEN_LIGHT = "#7A9B30";
+const DARK = "#1A1E0F";
 
 const ACTIVITY_TYPES = [
   {

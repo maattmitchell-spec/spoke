@@ -69,7 +69,7 @@ const INFO_CONTENT: Record<
 function InfoLine({ icon, text, textColor }: { icon: string; text: string; textColor: string }) {
   return (
     <View style={infoStyles.row}>
-      <Feather name={icon as any} size={15} color="#1A9E4F" style={infoStyles.icon} />
+      <Feather name={icon as any} size={15} color="#556B2F" style={infoStyles.icon} />
       <Text style={[infoStyles.text, { color: textColor }]}>{text}</Text>
     </View>
   );

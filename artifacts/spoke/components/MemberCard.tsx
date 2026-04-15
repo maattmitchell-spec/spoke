@@ -10,8 +10,8 @@ interface Props {
 }
 
 const ROLE_COLORS: Record<string, string> = {
-  "Ride Captain": "#1A9E4F",
-  "Trail Ambassador": "#2EBD6A",
+  "Ride Captain": "#556B2F",
+  "Trail Ambassador": "#7A9B30",
   "Community Host": "#FFB800",
   Member: "#6B7D72",
 };

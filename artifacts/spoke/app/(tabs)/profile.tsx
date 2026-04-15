@@ -32,7 +32,7 @@ const STATS = [
 ];
 
 const TYPE_META: Record<EventType, { icon: string; label: string; color: string }> = {
-  ride: { icon: "wind", label: "RIDE", color: "#1A9E4F" },
+  ride: { icon: "wind", label: "RIDE", color: "#556B2F" },
   run: { icon: "activity", label: "RUN", color: "#0284C7" },
   hike: { icon: "triangle", label: "HIKE", color: "#D97706" },
   meetup: { icon: "users", label: "MEETUP", color: "#7C3AED" },

@@ -24,8 +24,8 @@ import { useColors } from "@/hooks/useColors";
 
 WebBrowser.maybeCompleteAuthSession();
 
-const GREEN = "#1A9E4F";
-const GREEN_DARK = "#0F6832";
+const GREEN = "#556B2F";
+const GREEN_DARK = "#3A4A1E";
 
 export default function SignInScreen() {
   const colors = useColors();

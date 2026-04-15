@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-const GREEN = "#1A9E4F";
-const DARK = "#0A1F12";
+const GREEN = "#556B2F";
+const DARK = "#1A1E0F";
 
 const FAQS = [
   {

@@ -1,7 +1,7 @@
 import React from "react";
 
-const GREEN = "#1A9E4F";
-const DARK = "#0A1F12";
+const GREEN = "#556B2F";
+const DARK = "#1A1E0F";
 const EFFECTIVE_DATE = "April 14, 2026";
 
 interface Section {
