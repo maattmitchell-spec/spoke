@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Svg, { Circle, Line } from "react-native-svg";
+import Svg, { Circle, Line, Path } from "react-native-svg";
 
 import { useColors } from "@/hooks/useColors";
 
@@ -21,44 +21,74 @@ export function BikeWheelIcon({
   const colors = useColors();
   const c = color ?? colors.primary;
 
-  // 100×100 viewBox — filled hub-and-spoke, 6 satellites at 60° intervals
+  // 100×100 viewBox — 8-spoke hub icon with gear-notched hub ring
+  // Hub: alternating inner (r=9 at spoke angles) / outer (r=14 at mid angles) vertices → gear shape
+  // Spokes: lines from hub inner points to terminal circles (r=38 from center)
+  // Terminals: small hollow circles (r=5)
+  const numSpokes = 8;
+  const innerR = 9;
+  const outerR = 14;
+  const spokeEndR = 38;
+  const termR = 5;
+  const sw = 3;
   const hx = 50, hy = 50;
-  const hubR = 13;
-  const nodeR = 8;
-  const spokeLen = 34; // center-to-center distance
-  const sw = 6; // spoke line width
 
-  // 6 evenly-spaced satellites starting at 0° (right), stepping 60° CCW
-  // SVG y-axis is flipped, so sin is negated for "up"
-  const satellites = Array.from({ length: 6 }, (_, i) => {
-    const deg = i * 60;
-    const rad = (deg * Math.PI) / 180;
-    return {
-      cx: hx + spokeLen * Math.cos(rad),
-      cy: hy - spokeLen * Math.sin(rad),
-    };
-  });
+  const gearPts: string[] = [];
+  const spokeLines: { x1: number; y1: number; x2: number; y2: number }[] = [];
+  const termCircles: { cx: number; cy: number }[] = [];
+
+  for (let i = 0; i < numSpokes * 2; i++) {
+    const angleRad = (i * 2 * Math.PI) / (numSpokes * 2);
+    const r = i % 2 === 0 ? innerR : outerR;
+    const x = hx + r * Math.cos(angleRad);
+    const y = hy - r * Math.sin(angleRad);
+    gearPts.push(`${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`);
+
+    if (i % 2 === 0) {
+      const spokeAngle = angleRad;
+      const x2 = hx + spokeEndR * Math.cos(spokeAngle);
+      const y2 = hy - spokeEndR * Math.sin(spokeAngle);
+      spokeLines.push({ x1: x, y1: y, x2, y2 });
+      termCircles.push({ cx: x2, cy: y2 });
+    }
+  }
+
+  const gearPath = gearPts.join(" ") + " Z";
 
   return (
     <Svg width={size} height={size} viewBox="0 0 100 100">
-      {/* Filled spokes drawn first so circles sit on top */}
-      {satellites.map((s, i) => (
+      {/* Spokes */}
+      {spokeLines.map((s, i) => (
         <Line
           key={i}
-          x1={hx} y1={hy}
-          x2={s.cx} y2={s.cy}
+          x1={s.x1} y1={s.y1}
+          x2={s.x2} y2={s.y2}
           stroke={c}
           strokeWidth={sw}
           strokeLinecap="round"
         />
       ))}
 
-      {/* Filled hub */}
-      <Circle cx={hx} cy={hy} r={hubR} fill={c} />
+      {/* Gear hub (hollow, outline only) */}
+      <Path
+        d={gearPath}
+        stroke={c}
+        strokeWidth={sw}
+        strokeLinejoin="miter"
+        fill="none"
+      />
 
-      {/* Filled satellite dots */}
-      {satellites.map((s, i) => (
-        <Circle key={i} cx={s.cx} cy={s.cy} r={nodeR} fill={c} />
+      {/* Terminal circles (hollow) */}
+      {termCircles.map((t, i) => (
+        <Circle
+          key={i}
+          cx={t.cx}
+          cy={t.cy}
+          r={termR}
+          stroke={c}
+          strokeWidth={sw}
+          fill="none"
+        />
       ))}
     </Svg>
   );

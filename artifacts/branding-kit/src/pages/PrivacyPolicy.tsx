@@ -278,13 +278,24 @@ export default function PrivacyPolicy() {
       {/* Header */}
       <header style={{ backgroundColor: "#fff", borderBottom: "1px solid #e5e7eb", padding: "0 24px" }}>
         <div style={{ maxWidth: 800, margin: "0 auto", height: 64, display: "flex", alignItems: "center", gap: 10 }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke={GREEN} strokeWidth="2" />
-            <circle cx="12" cy="12" r="3" fill={GREEN} />
-            <line x1="12" y1="2" x2="12" y2="6" stroke={GREEN} strokeWidth="2" strokeLinecap="round" />
-            <line x1="12" y1="18" x2="12" y2="22" stroke={GREEN} strokeWidth="2" strokeLinecap="round" />
-            <line x1="2" y1="12" x2="6" y2="12" stroke={GREEN} strokeWidth="2" strokeLinecap="round" />
-            <line x1="18" y1="12" x2="22" y2="12" stroke={GREEN} strokeWidth="2" strokeLinecap="round" />
+          <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
+            <line x1="59" y1="50" x2="88" y2="50" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="56.36" y1="43.64" x2="76.87" y2="23.13" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="41" x2="50" y2="12" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="43.64" y1="43.64" x2="23.13" y2="23.13" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="41" y1="50" x2="12" y2="50" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="43.64" y1="56.36" x2="23.13" y2="76.87" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="59" x2="50" y2="88" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="56.36" y1="56.36" x2="76.87" y2="76.87" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <path d="M 59.00 50.00 L 62.93 44.64 L 56.36 43.64 L 55.36 37.07 L 50.00 41.00 L 44.64 37.07 L 43.64 43.64 L 37.07 44.64 L 41.00 50.00 L 37.07 55.36 L 43.64 56.36 L 44.64 62.93 L 50.00 59.00 L 55.36 62.93 L 56.36 56.36 L 62.93 55.36 Z" stroke={GREEN} strokeWidth="3" fill="none" strokeLinejoin="miter"/>
+            <circle cx="88" cy="50" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="76.87" cy="23.13" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="50" cy="12" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="23.13" cy="23.13" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="12" cy="50" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="23.13" cy="76.87" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="50" cy="88" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="76.87" cy="76.87" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
           </svg>
           <span style={{ fontSize: 18, fontWeight: 700, color: DARK, letterSpacing: "-0.4px" }}>spoke</span>
           <span style={{
