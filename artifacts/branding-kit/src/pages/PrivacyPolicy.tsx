@@ -278,24 +278,27 @@ export default function PrivacyPolicy() {
       {/* Header */}
       <header style={{ backgroundColor: "#fff", borderBottom: "1px solid #e5e7eb", padding: "0 24px" }}>
         <div style={{ maxWidth: 800, margin: "0 auto", height: 64, display: "flex", alignItems: "center", gap: 10 }}>
-          <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
-            <line x1="59" y1="50" x2="88" y2="50" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
-            <line x1="56.36" y1="43.64" x2="76.87" y2="23.13" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
-            <line x1="50" y1="41" x2="50" y2="12" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
-            <line x1="43.64" y1="43.64" x2="23.13" y2="23.13" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
-            <line x1="41" y1="50" x2="12" y2="50" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
-            <line x1="43.64" y1="56.36" x2="23.13" y2="76.87" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
-            <line x1="50" y1="59" x2="50" y2="88" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
-            <line x1="56.36" y1="56.36" x2="76.87" y2="76.87" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
-            <path d="M 59.00 50.00 L 62.93 44.64 L 56.36 43.64 L 55.36 37.07 L 50.00 41.00 L 44.64 37.07 L 43.64 43.64 L 37.07 44.64 L 41.00 50.00 L 37.07 55.36 L 43.64 56.36 L 44.64 62.93 L 50.00 59.00 L 55.36 62.93 L 56.36 56.36 L 62.93 55.36 Z" stroke={GREEN} strokeWidth="3" fill="none" strokeLinejoin="miter"/>
-            <circle cx="88" cy="50" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
-            <circle cx="76.87" cy="23.13" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
-            <circle cx="50" cy="12" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
-            <circle cx="23.13" cy="23.13" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
-            <circle cx="12" cy="50" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
-            <circle cx="23.13" cy="76.87" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
-            <circle cx="50" cy="88" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
-            <circle cx="76.87" cy="76.87" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+          <svg width="22" height="22" viewBox="0 0 100 100">
+            <line x1="50" y1="50" x2="90"    y2="50"    stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="50" x2="78.28" y2="21.72" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="50" x2="50"    y2="10"    stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="50" x2="21.72" y2="21.72" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="50" x2="10"    y2="50"    stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="50" x2="21.72" y2="78.28" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="50" x2="50"    y2="90"    stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <line x1="50" y1="50" x2="78.28" y2="78.28" stroke={GREEN} strokeWidth="3" strokeLinecap="round"/>
+            <path
+              d="M 73.00 50.00 L 64.78 43.88 L 66.26 33.74 L 56.12 35.22 L 50.00 27.00 L 43.88 35.22 L 33.74 33.74 L 35.22 43.88 L 27.00 50.00 L 35.22 56.12 L 33.74 66.26 L 43.88 64.78 L 50.00 73.00 L 56.12 64.78 L 66.26 66.26 L 64.78 56.12 Z M 60 50 A 10 10 0 1 0 40 50 A 10 10 0 1 0 60 50 Z"
+              fill={GREEN} fillRule="evenodd"
+            />
+            <circle cx="90"    cy="50"    r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="78.28" cy="21.72" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="50"    cy="10"    r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="21.72" cy="21.72" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="10"    cy="50"    r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="21.72" cy="78.28" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="50"    cy="90"    r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
+            <circle cx="78.28" cy="78.28" r="5" stroke={GREEN} strokeWidth="3" fill="none"/>
           </svg>
           <span style={{ fontSize: 18, fontWeight: 700, color: DARK, letterSpacing: "-0.4px" }}>spoke</span>
           <span style={{

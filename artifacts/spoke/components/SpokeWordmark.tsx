@@ -21,72 +21,59 @@ export function BikeWheelIcon({
   const colors = useColors();
   const c = color ?? colors.primary;
 
-  // 100×100 viewBox — 8-spoke hub icon with gear-notched hub ring
-  // Hub: alternating inner (r=9 at spoke angles) / outer (r=14 at mid angles) vertices → gear shape
-  // Spokes: lines from hub inner points to terminal circles (r=38 from center)
-  // Terminals: small hollow circles (r=5)
-  const numSpokes = 8;
-  const innerR = 9;
-  const outerR = 14;
-  const spokeEndR = 38;
-  const termR = 5;
-  const sw = 3;
-  const hx = 50, hy = 50;
+  // 100×100 viewBox — filled gear hub with hollow center + 8 spokes + terminal circles
+  // Gear: 8 teeth at spoke angles (outerR=23), valleys between (innerR=16), hole at center (r=10)
+  // Spokes drawn from center outward; filled gear sits on top and naturally masks inner portions
+  // Terminals: small hollow circles (r=5) at spoke tips (r=40 from center)
 
-  const gearPts: string[] = [];
-  const spokeLines: { x1: number; y1: number; x2: number; y2: number }[] = [];
-  const termCircles: { cx: number; cy: number }[] = [];
+  const GEAR_PATH =
+    "M 73.00 50.00 L 64.78 43.88 L 66.26 33.74 L 56.12 35.22 L 50.00 27.00 " +
+    "L 43.88 35.22 L 33.74 33.74 L 35.22 43.88 L 27.00 50.00 L 35.22 56.12 " +
+    "L 33.74 66.26 L 43.88 64.78 L 50.00 73.00 L 56.12 64.78 L 66.26 66.26 " +
+    "L 64.78 56.12 Z " +
+    "M 60 50 A 10 10 0 1 0 40 50 A 10 10 0 1 0 60 50 Z";
 
-  for (let i = 0; i < numSpokes * 2; i++) {
-    const angleRad = (i * 2 * Math.PI) / (numSpokes * 2);
-    const r = i % 2 === 0 ? innerR : outerR;
-    const x = hx + r * Math.cos(angleRad);
-    const y = hy - r * Math.sin(angleRad);
-    gearPts.push(`${i === 0 ? "M" : "L"} ${x.toFixed(2)} ${y.toFixed(2)}`);
-
-    if (i % 2 === 0) {
-      const spokeAngle = angleRad;
-      const x2 = hx + spokeEndR * Math.cos(spokeAngle);
-      const y2 = hy - spokeEndR * Math.sin(spokeAngle);
-      spokeLines.push({ x1: x, y1: y, x2, y2 });
-      termCircles.push({ cx: x2, cy: y2 });
-    }
-  }
-
-  const gearPath = gearPts.join(" ") + " Z";
+  const spokes = [
+    { x2: 90,    y2: 50    },
+    { x2: 78.28, y2: 21.72 },
+    { x2: 50,    y2: 10    },
+    { x2: 21.72, y2: 21.72 },
+    { x2: 10,    y2: 50    },
+    { x2: 21.72, y2: 78.28 },
+    { x2: 50,    y2: 90    },
+    { x2: 78.28, y2: 78.28 },
+  ];
 
   return (
     <Svg width={size} height={size} viewBox="0 0 100 100">
-      {/* Spokes */}
-      {spokeLines.map((s, i) => (
+      {/* Spokes — drawn first so filled gear covers their inner ends */}
+      {spokes.map((s, i) => (
         <Line
           key={i}
-          x1={s.x1} y1={s.y1}
+          x1={50} y1={50}
           x2={s.x2} y2={s.y2}
           stroke={c}
-          strokeWidth={sw}
+          strokeWidth={3}
           strokeLinecap="round"
         />
       ))}
 
-      {/* Gear hub (hollow, outline only) */}
+      {/* Filled gear with hollow center (evenodd) */}
       <Path
-        d={gearPath}
-        stroke={c}
-        strokeWidth={sw}
-        strokeLinejoin="miter"
-        fill="none"
+        d={GEAR_PATH}
+        fill={c}
+        fillRule="evenodd"
       />
 
-      {/* Terminal circles (hollow) */}
-      {termCircles.map((t, i) => (
+      {/* Terminal hollow circles at spoke tips */}
+      {spokes.map((s, i) => (
         <Circle
           key={i}
-          cx={t.cx}
-          cy={t.cy}
-          r={termR}
+          cx={s.x2}
+          cy={s.y2}
+          r={5}
           stroke={c}
-          strokeWidth={sw}
+          strokeWidth={3}
           fill="none"
         />
       ))}
