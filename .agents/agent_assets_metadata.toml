@@ -95,3 +95,9 @@ id = "40AIM1f61hQ6Y-WU6i8qX"
 uri = "file://attached_assets/stock_images/meetup_friends_3.jpg"
 type = "image"
 title = "happy friends sitting together around table outdoors eating laughing socializing"
+
+[[outputs]]
+id = "2mhI2X_raNxYNHKnAAvY-"
+uri = "file://artifacts/spoke/assets/images/spoke-logo-animated.gif"
+type = "image"
+title = "Spoke Animated Logo"
