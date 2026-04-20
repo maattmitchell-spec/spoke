@@ -101,3 +101,9 @@ id = "2mhI2X_raNxYNHKnAAvY-"
 uri = "file://artifacts/spoke/assets/images/spoke-logo-animated.gif"
 type = "image"
 title = "Spoke Animated Logo"
+
+[[outputs]]
+id = "KIplmxV4rW3yzAjFBk330"
+uri = "file://artifacts/spoke/assets/images/drop-logo-animated.gif"
+type = "image"
+title = "Animated Drop Logo"
