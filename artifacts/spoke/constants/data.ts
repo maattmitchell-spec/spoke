@@ -24,6 +24,7 @@ export interface Event {
   tags: string[];
   isJoined: boolean;
   ridewithgpsUrl?: string;
+  alltrailsUrl?: string;
 }
 
 export interface Member {
@@ -99,6 +100,7 @@ export const SAMPLE_EVENTS: Event[] = [
       "Permit secured. Full day summit attempt via the JMT connector. Cables will be up. This is a serious day — bring 3L water, gaiters, and snacks to last.",
     tags: ["alpine", "permit", "summit"],
     isJoined: false,
+    alltrailsUrl: "https://www.alltrails.com/trail/us/california/half-dome-trail",
   },
   {
     id: "4",
@@ -160,6 +162,7 @@ export const SAMPLE_EVENTS: Event[] = [
       "Full moon summit hike. Bring a headlamp anyway — the view from the East Peak at midnight is worth every step. Flask optional, stars mandatory.",
     tags: ["night", "full moon", "summit"],
     isJoined: false,
+    alltrailsUrl: "https://www.alltrails.com/trail/us/california/mount-tamalpais-east-peak",
   },
 ];
 

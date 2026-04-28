@@ -3,6 +3,7 @@ import * as Linking from "expo-linking";
 import React from "react";
 import {
   Image,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,6 +18,7 @@ interface Props {
   location: string;
   type: EventType;
   ridewithgpsUrl?: string;
+  alltrailsUrl?: string;
 }
 
 const MAPBOX_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
@@ -36,20 +38,23 @@ function openDirections(lat: number, lng: number, label: string) {
     `comgooglemaps://?daddr=${lat},${lng}&directionsmode=driving`
   ).catch(() =>
     Linking.openURL(
-      `https://www.google.com/maps/dir/?api=1&destination=${encoded}&destination_place_id=${lat},${lng}`
+      `https://www.google.com/maps/dir/?api=1&destination=${encoded}`
     )
   );
 }
 
-function openRideWithGPS(url: string) {
+function openUrl(url: string) {
   Linking.openURL(url).catch(() => null);
 }
 
-export function RouteMap({ coordinates, location, type, ridewithgpsUrl }: Props) {
+export function RouteMap({ coordinates, location, type, ridewithgpsUrl, alltrailsUrl }: Props) {
   const colors = useColors();
   const { lat, lng } = coordinates;
   const mapUrl = buildStaticMapUrl(lat, lng);
-  const showRideWithGPS = (type === "ride" || type === "run") && !!ridewithgpsUrl;
+
+  const showRideWithGPS = type === "ride" && !!ridewithgpsUrl;
+  const showAllTrails = (type === "hike" || type === "run") && !!alltrailsUrl;
+  const hasExtraButton = showRideWithGPS || showAllTrails;
 
   return (
     <View
@@ -77,12 +82,16 @@ export function RouteMap({ coordinates, location, type, ridewithgpsUrl }: Props)
         >
           <Feather name="map" size={28} color={colors.mutedForeground} />
           <Text style={[styles.placeholderText, { color: colors.mutedForeground }]}>
-            Add EXPO_PUBLIC_MAPBOX_TOKEN to see the map
+            Map preview unavailable
           </Text>
         </View>
       )}
 
-      <View style={styles.buttons}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.buttons}
+      >
         <TouchableOpacity
           style={[
             styles.btn,
@@ -90,7 +99,6 @@ export function RouteMap({ coordinates, location, type, ridewithgpsUrl }: Props)
               backgroundColor: colors.secondary,
               borderColor: colors.border,
               borderRadius: colors.radius / 1.5,
-              flex: showRideWithGPS ? 1 : undefined,
             },
           ]}
           onPress={() => openDirections(lat, lng, location)}
@@ -102,18 +110,37 @@ export function RouteMap({ coordinates, location, type, ridewithgpsUrl }: Props)
           </Text>
         </TouchableOpacity>
 
+        {showAllTrails && (
+          <TouchableOpacity
+            style={[
+              styles.btn,
+              {
+                backgroundColor: "#3D8C40",
+                borderRadius: colors.radius / 1.5,
+                borderWidth: 0,
+              },
+            ]}
+            onPress={() => openUrl(alltrailsUrl!)}
+            activeOpacity={0.75}
+          >
+            <Feather name="trending-up" size={15} color="#fff" />
+            <Text style={[styles.btnText, { color: "#fff" }]}>
+              View on AllTrails
+            </Text>
+          </TouchableOpacity>
+        )}
+
         {showRideWithGPS && (
           <TouchableOpacity
             style={[
               styles.btn,
-              styles.btnPrimary,
               {
                 backgroundColor: colors.primary,
                 borderRadius: colors.radius / 1.5,
-                flex: 1,
+                borderWidth: 0,
               },
             ]}
-            onPress={() => openRideWithGPS(ridewithgpsUrl!)}
+            onPress={() => openUrl(ridewithgpsUrl!)}
             activeOpacity={0.75}
           >
             <Feather name="map-pin" size={15} color={colors.primaryForeground} />
@@ -122,7 +149,7 @@ export function RouteMap({ coordinates, location, type, ridewithgpsUrl }: Props)
             </Text>
           </TouchableOpacity>
         )}
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -161,9 +188,6 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
     paddingHorizontal: 14,
     borderWidth: 1,
-  },
-  btnPrimary: {
-    borderWidth: 0,
   },
   btnText: {
     fontSize: 13,

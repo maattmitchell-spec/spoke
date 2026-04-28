@@ -229,6 +229,7 @@ export default function EventDetailScreen() {
                 location={event.location}
                 type={event.type}
                 ridewithgpsUrl={event.ridewithgpsUrl}
+                alltrailsUrl={event.alltrailsUrl}
               />
             </>
           )}

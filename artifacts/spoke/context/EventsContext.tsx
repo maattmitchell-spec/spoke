@@ -27,6 +27,7 @@ interface NewEventInput {
   description: string;
   tags: string[];
   ridewithgpsUrl?: string;
+  alltrailsUrl?: string;
 }
 
 interface EventsContextType {
