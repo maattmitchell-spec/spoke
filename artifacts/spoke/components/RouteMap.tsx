@@ -32,9 +32,11 @@ function buildStaticMapUrl(lat: number, lng: number): string | null {
 
 function openDirections(lat: number, lng: number, label: string) {
   const encoded = encodeURIComponent(label);
-  Linking.openURL(`maps://?q=${encoded}&ll=${lat},${lng}`).catch(() =>
+  Linking.openURL(
+    `comgooglemaps://?daddr=${lat},${lng}&directionsmode=driving`
+  ).catch(() =>
     Linking.openURL(
-      `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`
+      `https://www.google.com/maps/dir/?api=1&destination=${encoded}&destination_place_id=${lat},${lng}`
     )
   );
 }
