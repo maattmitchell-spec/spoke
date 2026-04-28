@@ -80,6 +80,7 @@ export const SAMPLE_EVENTS: Event[] = [
       "Rolling fire roads and eucalyptus forests above the fog. Easy conversational pace — all trail runners welcome. Post-run coffee at Jupiter.",
     tags: ["trail", "hills", "fog"],
     isJoined: true,
+    alltrailsUrl: "https://www.alltrails.com/trail/us/california/tilden-regional-park-fire-trail",
   },
   {
     id: "3",
