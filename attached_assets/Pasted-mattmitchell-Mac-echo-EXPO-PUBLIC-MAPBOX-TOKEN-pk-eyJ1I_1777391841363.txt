@@ -1,0 +1,40 @@
+mattmitchell@Mac ~ % echo 'EXPO_PUBLIC_MAPBOX_TOKEN=pk.eyJ1IjoibWl0Y2hlbGwyODQ1IiwiYSI6ImNtb2lzOWd1czA1ZXkycHE1M2t3OHEzdHQifQ.unZZbHpp3QhCHLs-XL7ivQ' >> /Users/mattmitchell/spoke/artifacts/spoke/.env
+mattmitchell@Mac ~ % 
+mattmitchell@Mac ~ % npx expo prebuild --platform ios --clean
+Need to install the following packages:
+expo@55.0.18
+Ok to proceed? (y) y
+ConfigError: The expected package.json path: /Users/mattmitchell/package.json does not exist
+npm notice
+npm notice New minor version of npm available! 11.12.1 -> 11.13.0
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.13.0
+npm notice To update run: npm install -g npm@11.13.0
+npm notice
+mattmitchell@Mac ~ % npm install -g npm@11.13.0
+npm error code EACCES
+npm error syscall rename
+npm error path /usr/local/lib/node_modules/npm
+npm error dest /usr/local/lib/node_modules/.npm-i9nnxROI
+npm error errno -13
+npm error Error: EACCES: permission denied, rename '/usr/local/lib/node_modules/npm' -> '/usr/local/lib/node_modules/.npm-i9nnxROI'
+npm error     at async Object.rename (node:internal/fs/promises:785:10)
+npm error     at async moveFile (/usr/local/lib/node_modules/npm/node_modules/@npmcli/fs/lib/move-file.js:30:5)
+npm error     at async Promise.allSettled (index 0)
+npm error     at async #reifyPackages (/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:317:11)
+npm error     at async Arborist.reify (/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:127:5)
+npm error     at async Install.exec (/usr/local/lib/node_modules/npm/lib/commands/install.js:146:5)
+npm error     at async Npm.exec (/usr/local/lib/node_modules/npm/lib/npm.js:193:9)
+npm error     at async module.exports (/usr/local/lib/node_modules/npm/lib/cli/entry.js:67:5) {
+npm error   errno: -13,
+npm error   code: 'EACCES',
+npm error   syscall: 'rename',
+npm error   path: '/usr/local/lib/node_modules/npm',
+npm error   dest: '/usr/local/lib/node_modules/.npm-i9nnxROI'
+npm error }
+npm error
+npm error The operation was rejected by your operating system.
+npm error It is likely you do not have the permissions to access this file as the current user
+npm error
+npm error If you believe this might be a permissions issue, please double-check the permissions of the file and its containing directories, or try running the command again as root/Administrator.
+npm error A complete log of this run can be found in: /Users/mattmitchell/.npm/_logs/2026-04-28T15_56_43_762Z-debug-0.log
+mattmitchell@Mac ~ % 
