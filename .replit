@@ -24,3 +24,8 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[userenv]
+
+[userenv.shared]
+EXPO_PUBLIC_MAPBOX_TOKEN = "pk.eyJ1IjoibWl0Y2hlbGwyODQ1IiwiYSI6ImNtb2lzOWd1czA1ZXkycHE1M2t3OHEzdHQifQ.unZZbHpp3QhCHLs-XL7ivQ"
