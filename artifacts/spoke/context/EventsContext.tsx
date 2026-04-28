@@ -17,6 +17,7 @@ interface NewEventInput {
   date: string;
   time: string;
   location: string;
+  coordinates?: { lat: number; lng: number };
   distance?: string;
   elevation?: string;
   difficulty: Difficulty;
@@ -25,6 +26,7 @@ interface NewEventInput {
   hostAvatar: string;
   description: string;
   tags: string[];
+  ridewithgpsUrl?: string;
 }
 
 interface EventsContextType {

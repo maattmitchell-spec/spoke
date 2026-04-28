@@ -22,6 +22,7 @@ import { useEvents } from "@/context/EventsContext";
 import { useChat } from "@/context/ChatContext";
 import { useUser } from "@/context/UserContext";
 import type { EventType } from "@/constants/data";
+import { RouteMap } from "@/components/RouteMap";
 
 const TYPE_IMAGES: Record<EventType, ImageSourcePropType> = {
   ride: require("@/assets/ride_header.jpg"),
@@ -218,6 +219,20 @@ export default function EventDetailScreen() {
         )}
 
         <View style={styles.body}>
+          {event.coordinates && (
+            <>
+              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
+                Location & Route
+              </Text>
+              <RouteMap
+                coordinates={event.coordinates}
+                location={event.location}
+                type={event.type}
+                ridewithgpsUrl={event.ridewithgpsUrl}
+              />
+            </>
+          )}
+
           <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
             About this event
           </Text>

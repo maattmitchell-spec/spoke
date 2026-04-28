@@ -1,5 +1,10 @@
 export type EventType = "ride" | "run" | "hike" | "meetup";
 
+export interface Coordinates {
+  lat: number;
+  lng: number;
+}
+
 export interface Event {
   id: string;
   title: string;
@@ -7,6 +12,7 @@ export interface Event {
   date: string;
   time: string;
   location: string;
+  coordinates?: Coordinates;
   distance?: string;
   elevation?: string;
   difficulty: "easy" | "moderate" | "hard";
@@ -17,6 +23,7 @@ export interface Event {
   description: string;
   tags: string[];
   isJoined: boolean;
+  ridewithgpsUrl?: string;
 }
 
 export interface Member {
@@ -39,6 +46,7 @@ export const SAMPLE_EVENTS: Event[] = [
     date: "SAT APR 5",
     time: "6:30 AM",
     location: "Marin Headlands, CA",
+    coordinates: { lat: 37.8283, lng: -122.5311 },
     distance: "42 mi",
     elevation: "3,200 ft",
     difficulty: "hard",
@@ -50,6 +58,7 @@ export const SAMPLE_EVENTS: Event[] = [
       "Classic Marin loop — Rodeo Beach to Hawk Hill and back. Expect marine layer, rugged fire roads, and cold air. Cafe stop mid-ride. Bring layers and tubeless setup.",
     tags: ["gravel", "dawn", "coastal"],
     isJoined: false,
+    ridewithgpsUrl: "https://ridewithgps.com/routes/46851791",
   },
   {
     id: "2",
@@ -58,6 +67,7 @@ export const SAMPLE_EVENTS: Event[] = [
     date: "SUN APR 6",
     time: "7:00 AM",
     location: "Tilden Park, Berkeley",
+    coordinates: { lat: 37.9000, lng: -122.2478 },
     distance: "8 mi",
     elevation: "1,100 ft",
     difficulty: "moderate",
@@ -77,6 +87,7 @@ export const SAMPLE_EVENTS: Event[] = [
     date: "SAT APR 12",
     time: "5:00 AM",
     location: "Yosemite Valley, CA",
+    coordinates: { lat: 37.7459, lng: -119.5936 },
     distance: "16 mi",
     elevation: "4,800 ft",
     difficulty: "hard",
@@ -96,6 +107,7 @@ export const SAMPLE_EVENTS: Event[] = [
     date: "WED APR 9",
     time: "8:00 AM",
     location: "Sightglass Coffee, SF",
+    coordinates: { lat: 37.7785, lng: -122.4068 },
     distance: undefined,
     elevation: undefined,
     difficulty: "easy",
@@ -115,6 +127,7 @@ export const SAMPLE_EVENTS: Event[] = [
     date: "SAT APR 19",
     time: "7:30 AM",
     location: "Stinson Beach, CA",
+    coordinates: { lat: 37.8997, lng: -122.6442 },
     distance: "68 mi",
     elevation: "5,600 ft",
     difficulty: "hard",
@@ -126,6 +139,7 @@ export const SAMPLE_EVENTS: Event[] = [
       "Epic coastal century-lite — Fairfax to Stinson via Bolinas Ridge, back over Pantoll and White's Hill. Iconic Marin roads. Group holds for regrouping points.",
     tags: ["road", "coastal", "climbing"],
     isJoined: false,
+    ridewithgpsUrl: "https://ridewithgps.com/routes/45912044",
   },
   {
     id: "6",
@@ -134,6 +148,7 @@ export const SAMPLE_EVENTS: Event[] = [
     date: "FRI APR 18",
     time: "8:00 PM",
     location: "Mt. Tamalpais, CA",
+    coordinates: { lat: 37.9235, lng: -122.5965 },
     distance: "6 mi",
     elevation: "1,200 ft",
     difficulty: "moderate",
