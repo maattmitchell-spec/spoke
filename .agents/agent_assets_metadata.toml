@@ -113,3 +113,27 @@ id = "vwERvyc23F92b-lbxPzMg"
 uri = "file://artifacts/spoke/assets/images/drip-logo-animated.gif"
 type = "image"
 title = "Drip Logo Animation"
+
+[[outputs]]
+id = "y5wNaWL9LgjsCfdrI0R8V"
+uri = "file://screenshots/spoke-home.jpg"
+type = "image"
+title = "Spoke — Discover Feed"
+
+[[outputs]]
+id = "eXd9EeM0GQK7Gy5ICyq7T"
+uri = "file://screenshots/spoke-event-detail.jpg"
+type = "image"
+title = "Spoke — Event Detail & Map"
+
+[[outputs]]
+id = "e2Jw3leY2OuNtP_j60QZ7"
+uri = "file://screenshots/spoke-invite.jpg"
+type = "image"
+title = "Spoke — Invite Friends & Group Chat"
+
+[[outputs]]
+id = "hm2rKV7623kEkkxrocPi9"
+uri = "file://screenshots/spoke-chat.jpg"
+type = "image"
+title = "Spoke — Group Chat"
