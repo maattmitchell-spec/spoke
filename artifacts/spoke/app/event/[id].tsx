@@ -119,6 +119,40 @@ export default function EventDetailScreen() {
     });
   };
 
+  const buildInviteMessage = () => {
+    const lines = [
+      `Hey! I'm doing this on Spoke and think you'd love it 👇`,
+      ``,
+      `${event.title}`,
+      `📅  ${event.date} at ${event.time}`,
+      `📍  ${event.location}`,
+      ...(event.distance ? [`🏁  ${event.distance}${event.elevation ? `  ·  ${event.elevation} gain` : ""}`] : []),
+      ``,
+      `Download Spoke and join me: https://spokecommunity.app`,
+    ];
+    return lines.join("\n");
+  };
+
+  const handleTextInvite = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const body = encodeURIComponent(buildInviteMessage());
+    Linking.openURL(`sms:?body=${body}`).catch(() =>
+      Linking.openURL(`imessage:?body=${body}`)
+    );
+  };
+
+  const handleSocialShare = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    try {
+      await Share.share(
+        { title: event.title, message: buildInviteMessage() },
+        { dialogTitle: `Invite to ${event.title}` }
+      );
+    } catch {
+      // user cancelled — no-op
+    }
+  };
+
   const handleShare = async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     const lines = [
@@ -134,10 +168,7 @@ export default function EventDetailScreen() {
     ];
     try {
       await Share.share(
-        {
-          title: event.title,
-          message: lines.join("\n"),
-        },
+        { title: event.title, message: lines.join("\n") },
         { dialogTitle: `Share ${event.title}` }
       );
     } catch {
@@ -391,6 +422,45 @@ export default function EventDetailScreen() {
                 </Text>
               </View>
             ))}
+          </View>
+
+          <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
+            Invite Friends
+          </Text>
+          <View
+            style={[
+              styles.inviteCard,
+              { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius },
+            ]}
+          >
+            <Text style={[styles.inviteSubtitle, { color: colors.mutedForeground }]}>
+              Get your crew moving — share this activity and let them sign up on Spoke.
+            </Text>
+            <View style={styles.inviteButtons}>
+              <TouchableOpacity
+                activeOpacity={0.75}
+                onPress={handleTextInvite}
+                style={[
+                  styles.inviteBtn,
+                  { backgroundColor: colors.primary, borderRadius: colors.radius / 1.5 },
+                ]}
+              >
+                <Feather name="message-square" size={15} color="#fff" />
+                <Text style={styles.inviteBtnText}>Text a Friend</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.75}
+                onPress={handleSocialShare}
+                style={[
+                  styles.inviteBtn,
+                  styles.inviteBtnOutline,
+                  { borderColor: colors.border, borderRadius: colors.radius / 1.5, backgroundColor: colors.secondary },
+                ]}
+              >
+                <Feather name="share-2" size={15} color={colors.foreground} />
+                <Text style={[styles.inviteBtnText, { color: colors.foreground }]}>Share to Socials</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
           {event.isJoined && (
@@ -728,5 +798,37 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 14,
     fontFamily: "DMSans_600SemiBold",
+  },
+  inviteCard: {
+    borderWidth: 1,
+    padding: 16,
+    gap: 14,
+    marginBottom: 8,
+  },
+  inviteSubtitle: {
+    fontSize: 13,
+    fontFamily: "DMSans_400Regular",
+    lineHeight: 19,
+  },
+  inviteButtons: {
+    flexDirection: "row",
+    gap: 10,
+  },
+  inviteBtn: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 7,
+    paddingVertical: 11,
+    paddingHorizontal: 12,
+  },
+  inviteBtnOutline: {
+    borderWidth: 1,
+  },
+  inviteBtnText: {
+    fontSize: 13,
+    fontFamily: "DMSans_600SemiBold",
+    color: "#fff",
   },
 });
