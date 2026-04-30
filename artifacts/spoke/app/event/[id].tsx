@@ -1,5 +1,6 @@
 import { Feather, Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import * as Linking from "expo-linking";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useLocalSearchParams } from "expo-router";
 import React, { useRef } from "react";
@@ -21,8 +22,49 @@ import { useColors } from "@/hooks/useColors";
 import { useEvents } from "@/context/EventsContext";
 import { useChat } from "@/context/ChatContext";
 import { useUser } from "@/context/UserContext";
-import type { EventType } from "@/constants/data";
+import type { Event, EventType } from "@/constants/data";
 import { RouteMap } from "@/components/RouteMap";
+
+const MONTHS: Record<string, number> = {
+  JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5,
+  JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11,
+};
+
+function buildGoogleCalendarUrl(event: Event): string {
+  const dateParts = event.date.toUpperCase().split(" ");
+  const monthStr = dateParts.find((p) => MONTHS[p] !== undefined) ?? "JAN";
+  const dayStr = dateParts.find((p) => /^\d+$/.test(p)) ?? "1";
+  const month = MONTHS[monthStr] ?? 0;
+  const day = parseInt(dayStr, 10);
+
+  const timeMatch = event.time.match(/(\d+):(\d+)\s*(AM|PM)/i);
+  let hour = timeMatch ? parseInt(timeMatch[1], 10) : 9;
+  const minute = timeMatch ? parseInt(timeMatch[2], 10) : 0;
+  const isPM = timeMatch ? timeMatch[3].toUpperCase() === "PM" : false;
+  if (isPM && hour !== 12) hour += 12;
+  if (!isPM && hour === 12) hour = 0;
+
+  const now = new Date();
+  let year = now.getFullYear();
+  if (new Date(year, month, day) < now) year += 1;
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const fmt = (d: Date) =>
+    `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+
+  const start = new Date(year, month, day, hour, minute);
+  const end = new Date(year, month, day, hour + 2, minute);
+
+  const params = new URLSearchParams({
+    action: "TEMPLATE",
+    text: event.title,
+    dates: `${fmt(start)}/${fmt(end)}`,
+    details: event.description,
+    location: event.location,
+  });
+
+  return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
 
 const TYPE_IMAGES: Record<EventType, ImageSourcePropType> = {
   ride: require("@/assets/ride_header.jpg"),
@@ -240,6 +282,21 @@ export default function EventDetailScreen() {
           <Text style={[styles.description, { color: colors.mutedForeground }]}>
             {event.description}
           </Text>
+
+          <TouchableOpacity
+            activeOpacity={0.75}
+            onPress={() => Linking.openURL(buildGoogleCalendarUrl(event))}
+            style={[
+              styles.calendarBtn,
+              { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius },
+            ]}
+          >
+            <Feather name="calendar" size={16} color={colors.primary} />
+            <Text style={[styles.calendarBtnText, { color: colors.foreground }]}>
+              Add to Google Calendar
+            </Text>
+            <Feather name="external-link" size={14} color={colors.mutedForeground} />
+          </TouchableOpacity>
 
           <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
             Hosted by
@@ -657,5 +714,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "DMSans_600SemiBold",
     letterSpacing: 0.1,
+  },
+  calendarBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingVertical: 13,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    marginBottom: 24,
+  },
+  calendarBtnText: {
+    flex: 1,
+    fontSize: 14,
+    fontFamily: "DMSans_600SemiBold",
   },
 });
