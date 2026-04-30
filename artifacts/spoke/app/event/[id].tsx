@@ -463,46 +463,68 @@ export default function EventDetailScreen() {
             </View>
           </View>
 
-          {event.isJoined && (
-            <>
-              <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
-                Group Chat
-              </Text>
-              <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={() => router.push(`/event/chat/${event.id}` as any)}
-                style={[
-                  styles.chatCard,
-                  {
-                    backgroundColor: colors.card,
-                    borderColor: colors.border,
-                    borderRadius: colors.radius,
-                  },
-                ]}
-              >
-                <View style={[styles.chatIcon, { backgroundColor: colors.secondary }]}>
-                  <Feather name="message-circle" size={20} color={colors.primary} />
-                </View>
-                <View style={styles.chatInfo}>
-                  <Text style={[styles.chatTitle, { color: colors.foreground }]}>
-                    {event.title}
-                  </Text>
-                  <Text style={[styles.chatSub, { color: colors.mutedForeground }]}>
-                    {event.attendees} member{event.attendees !== 1 ? "s" : ""} going
-                  </Text>
-                </View>
-                <View style={styles.chatRight}>
-                  {getUnreadCount(event.id) > 0 && (
-                    <View style={[styles.badge, { backgroundColor: colors.primary }]}>
-                      <Text style={[styles.badgeText, { color: colors.primaryForeground }]}>
-                        {getUnreadCount(event.id)}
-                      </Text>
-                    </View>
-                  )}
-                  <Feather name="chevron-right" size={18} color={colors.mutedForeground} />
-                </View>
-              </TouchableOpacity>
-            </>
+          <Text style={[styles.sectionTitle, { color: colors.foreground }]}>
+            Group Chat
+          </Text>
+          {event.isJoined ? (
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => router.push(`/event/chat/${event.id}` as any)}
+              style={[
+                styles.chatCard,
+                {
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                  borderRadius: colors.radius,
+                },
+              ]}
+            >
+              <View style={[styles.chatIcon, { backgroundColor: colors.secondary }]}>
+                <Feather name="message-circle" size={20} color={colors.primary} />
+              </View>
+              <View style={styles.chatInfo}>
+                <Text style={[styles.chatTitle, { color: colors.foreground }]}>
+                  {event.title}
+                </Text>
+                <Text style={[styles.chatSub, { color: colors.mutedForeground }]}>
+                  {event.attendees} member{event.attendees !== 1 ? "s" : ""} going
+                </Text>
+              </View>
+              <View style={styles.chatRight}>
+                {getUnreadCount(event.id) > 0 && (
+                  <View style={[styles.badge, { backgroundColor: colors.primary }]}>
+                    <Text style={[styles.badgeText, { color: colors.primaryForeground }]}>
+                      {getUnreadCount(event.id)}
+                    </Text>
+                  </View>
+                )}
+                <Feather name="chevron-right" size={18} color={colors.mutedForeground} />
+              </View>
+            </TouchableOpacity>
+          ) : (
+            <View
+              style={[
+                styles.chatCard,
+                styles.chatLocked,
+                {
+                  backgroundColor: colors.card,
+                  borderColor: colors.border,
+                  borderRadius: colors.radius,
+                },
+              ]}
+            >
+              <View style={[styles.chatIcon, { backgroundColor: colors.secondary }]}>
+                <Feather name="lock" size={18} color={colors.mutedForeground} />
+              </View>
+              <View style={styles.chatInfo}>
+                <Text style={[styles.chatTitle, { color: colors.foreground }]}>
+                  Members only
+                </Text>
+                <Text style={[styles.chatSub, { color: colors.mutedForeground }]}>
+                  Join this event to access the group chat
+                </Text>
+              </View>
+            </View>
           )}
         </View>
       </ScrollView>
@@ -723,6 +745,9 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 14,
     borderWidth: 1,
+  },
+  chatLocked: {
+    opacity: 0.7,
   },
   chatIcon: {
     width: 40,
